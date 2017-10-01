@@ -19,7 +19,7 @@ public class AnalysisLexical {
 	public AnalysisLexical() {
 		lineArchive = new ArrayList<String>();
 		configFile = new Properties();
-		try {//Leitura das configurações
+		try {//Leitura das configuracoes
 			configFile.load(new FileInputStream("resources/LexicalConfigFile.properties"));
 			pathStorage = configFile.getProperty("PATHSTORAGE");
 			nameArchive = configFile.getProperty("NAMEARCHIVE");
@@ -67,7 +67,7 @@ public class AnalysisLexical {
 	}
 	
 	/**
-	 * Exibição das linhas lidas
+	 * Exibicao das linhas lidas
 	 */
 	public void printLines(){
 		for(int i = 0; i < lineArchive.size(); i++){

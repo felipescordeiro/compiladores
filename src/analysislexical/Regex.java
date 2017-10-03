@@ -16,7 +16,7 @@ public class Regex {
 							+ "|print|int|float|bool|true|false|string)\\b");
 	private final Pattern digito = Pattern.compile("\\d");
 	private final Pattern letra = Pattern.compile("[a-zA-Z]");
-	private final Pattern opAritmeticos = Pattern.compile("(+|-|*|/|%)");
+	private final Pattern opAritmeticos = Pattern.compile("(\\+|-|\\*|/|%)");
 	private final Pattern opRelacionais = Pattern.compile("(!=|=|<|<=|>|>=)");
 	private final Pattern opLogicos = Pattern.compile("!|\\|{2}|&&");
 	private Matcher matcher;

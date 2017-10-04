@@ -3,14 +3,14 @@
 int main(){
     
     int x, y, w, z;
-    printf("Vitoria %d x %d Bahia" x,y);
-    scanf("%d", &x);
-    //printf("Bahia ");
-    scanf("%d", &y);
-    printf("\nFeirense "); 
-    scanf("%d", &z);        
-    printf("Juazeirense ", z);
-    scanf("%d", &z);
+    print("Vitoria %d x %d Bahia" x,y);
+    scan("%d", &x);
+    //print("Bahia ");
+    scan("%d", &y);
+    print("\nFeirense "); 
+    scan("%d", &z);        
+    print("Juazeirense ", z);
+    scan("%d", &z);
 
   
     getch();

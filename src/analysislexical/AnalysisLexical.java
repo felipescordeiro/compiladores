@@ -12,7 +12,7 @@ import java.util.Properties;
 
 /**
  * 
- * @author felipe
+ * @author Felipe Cordeiro
  *
  */
 
@@ -71,7 +71,7 @@ public class AnalysisLexical {
 					}
 				}
 			  	lineArchive.add(numberLine, strLine);
-			  	line = file.readLine(); // lê da segunda até a última linha
+			  	line = file.readLine(); // le da segunda linha at� a ultima linha
 			  	numberLine++;
 		    }
 			fileRead.close();
@@ -91,7 +91,66 @@ public class AnalysisLexical {
 	}
 	
 	public void parser(){
-		
+		ArrayList<String> words = new ArrayList<String>();
+		for(int linha = 0; linha < lineArchive.size(); linha++){
+			if(!"".equals(lineArchive.get(linha).trim())) {
+				String[] a = lineArchive.get(linha).split(" ");				
+				for(int i = 0; i < a.length; i++) {
+					if(a[i].indexOf(";") >= 0) {
+						words.add("<delimitador, > " + " Delimitador: ;" + " Linha: " + linha);
+						a[i] = a[i].replace(";", "");
+					} else if(a[i].indexOf(",") >= 0) {
+						words.add("<delimitador, > " + " Delimitador: ," + " Linha: " + linha);
+						a[i] = a[i].replace(",", "");
+					} else if(a[i].indexOf("(") >= 0) {
+						words.add("<delimitador, > " + " Delimitador: (" + " Linha: " + linha);
+						a[i] = a[i].replace("(", "");
+					} else if(a[i].indexOf(")") >= 0) {
+						words.add("<delimitador, > " + " Delimitador: )" + " Linha: " + linha);
+						a[i] = a[i].replace(")", "");
+					} else if(a[i].indexOf("[") >= 0) {
+						words.add("<delimitador, > " + " Delimitador: [" + " Linha: " + linha);
+						a[i] = a[i].replace("[", "");
+					} else if(a[i].indexOf("]") >= 0) {
+						words.add("<delimitador, > " + " Delimitador: ]" + " Linha: " + linha);
+						a[i] = a[i].replace("]", "");
+					} else if(a[i].indexOf("{") >= 0) {
+						words.add("<delimitador, > " + " Delimitador: {" + " Linha: " + linha);
+						a[i] = a[i].replace("{", "");
+					} else if(a[i].indexOf("}") >= 0) {
+						words.add("<delimitador, > " + " Delimitador: }" + " Linha: " + linha);
+						a[i] = a[i].replace("}", "");
+					}
+					if(regex.isPalavrasReservadas(a[i])) {
+						System.out.println(linha + " Reservada: " + a[i]);
+						words.add("<" + a[i] + " ,>" + " Palavra Reservada: " + a[i] + " Linha: " + linha);
+					} else if (regex.isIdentificador(a[i])) {
+						System.out.println(linha + " Identificador: " + a[i]);
+						words.add("<identificador, >" + " Identificador: " + a[i] + " Linha: " + linha);
+					} else if (regex.isNumero(a[i])) {
+						System.out.println(linha + " Numero: " + a[i]);
+						words.add("<numero, >" + " numero: " + a[i] + " Linha: " + linha);
+					} else if (regex.isLetra(a[i])) {
+						System.out.println(linha + " letra: " + a[i]);
+						words.add("<letra, >" + " Letra: " + a[i] + " Linha: " + linha);
+					} else if (regex.isDigito(a[i])) {
+						System.out.println(linha + " Digito: " + a[i]);
+						words.add("<digito, >" + " Digito: " + a[i] + " Linha: " + linha);
+					} else if (regex.isOpAritmeticos(a[i])) {
+						System.out.println(linha + " Operador Aritmetico: " + a[i]);
+						words.add("<" + a[i] + ", >" + " Linha: " + linha);
+					} else if (regex.isOpLogicos(a[i])) {
+						System.out.println(linha + " Operador Logico: " + a[i]);
+						words.add("<" + a[i] + ", >" + " Linha: " + linha);
+					} else if (regex.isOpRelacionais(a[i])) {
+						System.out.println(linha + " Operador Relacional: " + a[i]);
+						words.add("<" + a[i] + ", >" + " Linha: " + linha);
+					}
+				}
+				
+			}			
+		}
+		/*		
 		for(int i = 0; i < lineArchive.size(); i++){
 			words = new HashMap<Integer, ArrayList<String>>();//hash da estrutura
 			
@@ -113,31 +172,37 @@ public class AnalysisLexical {
 					System.out.println(i +" Identificador: " + word[j]);
 					id.add(word[j]);
 				}else if(regex.isLetra(word[j])){
-					System.out.println(i +" Letra: " + word[j]);
+					System.out.println(i + " Letra: " + word[j]);
 					letter.add(word[j]);
-				}else if(regex.isDigito(word[j])){
-					System.out.println(i +" Digito: " + word[j]);
+				}else if(regex.isNumero(word[j])){
+					System.out.println(i + " Numero: " + word[j]);
+				}else if (regex.isDigito(word[j])) {
+					System.out.println(i + " Digito: " + word[j]);
 				}else if(regex.isOpRelacionais(word[j])){
-					System.out.println(i +" Relacionais: " + word[j]);
+					System.out.println(i + " Operadores Relacionais: " + word[j]);
 				}else if(regex.isOpAritmeticos(word[j])){
-					System.out.println(i +" Aritmético: " + word[j]);
+					System.out.println(i + " Operadores Aritmeticos: " + word[j]);
 				}else if(regex.isOpLogicos(word[j])){
-					System.out.println(i +" Lógicos: " + word[j]);
+					System.out.println(i + " Operadores Logicos: " + word[j]);
 				}
 			}
 			words.put(0, reserverdWord);
 			words.put(1, id);
 			words.put(2, letter);
 			matrix.put(i, words);
+			System.out.println(words);
 		}
+		
+		*/
 	}
 	
 	public void writeLexical(){
+		System.out.println(matrix);
 		for (Map.Entry<Integer,HashMap<Integer, ArrayList<String>>> pair : matrix.entrySet()) {
-		    for(Map.Entry<Integer, ArrayList<String>> pair2: matrix.get(pair.getKey()).entrySet()){
-
-				
-			    System.out.println("linha: " + pair.getKey() +" "+ pair2.getValue() + " "+pair2.getValue());	
+			//System.out.println("for 1:");
+		    for(Map.Entry<Integer, ArrayList<String>> pair2: matrix.get(pair.getKey()).entrySet()){		
+			   
+		    	//System.out.println("for 2 linha: " + pair.getKey() + " "+ pair2.getValue() + " " +pair2.getValue());	
 		    }
 		}
 

@@ -11,18 +11,24 @@ import java.util.regex.Matcher;
  * 
  */
 public class Regex {
-	private final Pattern identificador = Pattern.compile("\\b\\[a-zA-Z]\\w*");
-	private final Pattern palavrasReservadas = Pattern.compile("\\b(class|final|if|else|for|scan"
-							+ "|print|int|float|bool|true|false|string)\\b");
+	private final Pattern identificador = Pattern.compile("[a-zA-Z\\w*]\\b");
+	private final Pattern palavrasReservadas = Pattern.compile("(class|final|if|else|for|scan"
+							+ "|print|int|float|bool|true|false|string)");
 	private final Pattern digito = Pattern.compile("\\d");
+	private final Pattern numero = Pattern.compile("[-][\\t|\\n|\\x20|\\r]\\d*[\\.\\d++]");
 	private final Pattern letra = Pattern.compile("[a-zA-Z]");
 	private final Pattern opAritmeticos = Pattern.compile("(\\+|-|\\*|/|%)");
 	private final Pattern opRelacionais = Pattern.compile("(!=|=|<|<=|>|>=)");
 	private final Pattern opLogicos = Pattern.compile("!|\\|{2}|&&");
+	private final Pattern delimitador = Pattern.compile("(;|,|\\(|\\)|\\[|\\]|\\{|\\})");
 	private Matcher matcher;
 	
 	public Regex () {}
 	
+	public boolean isDelimitador(String sequence) {
+		this.matcher = this.delimitador.matcher(sequence);
+		return this.matcher.find();
+	}
 	/**
 	 * Identify if sequence has 'Identificador'
 	 * @param sequence string used for lexical analysis
@@ -30,7 +36,7 @@ public class Regex {
 	 */
 	public boolean isIdentificador(String sequence) {
 		this.matcher = this.identificador.matcher(sequence);
-		return this.matcher.matches();
+		return this.matcher.find();
 	}
 	
 	/**
@@ -40,7 +46,7 @@ public class Regex {
 	 */
 	public boolean isPalavrasReservadas(String sequence) {
 		this.matcher = this.palavrasReservadas.matcher(sequence);
-		return this.matcher.matches();
+		return this.matcher.find();
 	}
 	
 	/**
@@ -50,7 +56,17 @@ public class Regex {
 	 */
 	public boolean isDigito(String sequence) {
 		this.matcher = this.digito.matcher(sequence);
-		return this.matcher.matches();
+		return this.matcher.find();
+	}
+	
+	/**
+	 * Identify if sequence has 'Numero'
+	 * @param sequence string used for lexical analysis
+	 * @return true or false
+	 */
+	public boolean isNumero(String sequence) {
+		this.matcher = this.numero.matcher(sequence);
+		return this.matcher.find();
 	}
 	
 	/**
@@ -60,7 +76,7 @@ public class Regex {
 	 */
 	public boolean isLetra(String sequence){
 		this.matcher = this.letra.matcher(sequence);
-		return this.matcher.matches();
+		return this.matcher.find();
 	}
 	
 	/**
@@ -70,7 +86,7 @@ public class Regex {
 	 */
 	public boolean isOpAritmeticos(String sequence){
 		this.matcher = this.opAritmeticos.matcher(sequence);
-		return this.matcher.matches();
+		return this.matcher.find();
 	}
 	
 	/**
@@ -80,7 +96,7 @@ public class Regex {
 	 */
 	public boolean isOpRelacionais(String sequence){
 		this.matcher = this.opRelacionais.matcher(sequence);
-		return this.matcher.matches();
+		return this.matcher.find();
 	}
 	
 	/**
@@ -90,6 +106,6 @@ public class Regex {
 	 */
 	public boolean isOpLogicos(String sequence){
 		this.matcher = this.opLogicos.matcher(sequence);
-		return this.matcher.matches();
+		return this.matcher.find();
 	}
 }

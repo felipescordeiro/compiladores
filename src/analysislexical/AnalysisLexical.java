@@ -98,28 +98,28 @@ public class AnalysisLexical {
 				for(int i = 0; i < a.length; i++) {
 					if(a[i].indexOf(";") >= 0) {
 						words.add("<delimitador, > " + " Delimitador: ;" + " Linha: " + linha);
-						a[i] = a[i].replace(";", "");
-					} else if(a[i].indexOf(",") >= 0) {
+						a[i] = a[i].replace(";", " ");
+					} if(a[i].indexOf(",") >= 0) {
 						words.add("<delimitador, > " + " Delimitador: ," + " Linha: " + linha);
-						a[i] = a[i].replace(",", "");
-					} else if(a[i].indexOf("(") >= 0) {
+						a[i] = a[i].replace(",", " ");
+					} if(a[i].indexOf("(") >= 0) {
 						words.add("<delimitador, > " + " Delimitador: (" + " Linha: " + linha);
-						a[i] = a[i].replace("(", "");
-					} else if(a[i].indexOf(")") >= 0) {
+						a[i] = a[i].replace("(", " ");
+					} if(a[i].indexOf(")") >= 0) {
 						words.add("<delimitador, > " + " Delimitador: )" + " Linha: " + linha);
-						a[i] = a[i].replace(")", "");
-					} else if(a[i].indexOf("[") >= 0) {
+						a[i] = a[i].replace(")", " ");
+					} if(a[i].indexOf("[") >= 0) {
 						words.add("<delimitador, > " + " Delimitador: [" + " Linha: " + linha);
-						a[i] = a[i].replace("[", "");
-					} else if(a[i].indexOf("]") >= 0) {
+						a[i] = a[i].replace("[", " ");
+					} if(a[i].indexOf("]") >= 0) {
 						words.add("<delimitador, > " + " Delimitador: ]" + " Linha: " + linha);
-						a[i] = a[i].replace("]", "");
-					} else if(a[i].indexOf("{") >= 0) {
+						a[i] = a[i].replace("]", " ");
+					} if(a[i].indexOf("{") >= 0) {
 						words.add("<delimitador, > " + " Delimitador: {" + " Linha: " + linha);
-						a[i] = a[i].replace("{", "");
-					} else if(a[i].indexOf("}") >= 0) {
+						a[i] = a[i].replace("{", " ");
+					} if(a[i].indexOf("}") >= 0) {
 						words.add("<delimitador, > " + " Delimitador: }" + " Linha: " + linha);
-						a[i] = a[i].replace("}", "");
+						a[i] = a[i].replace("}", " ");
 					}
 					if(regex.isPalavrasReservadas(a[i])) {
 						System.out.println(linha + " Reservada: " + a[i]);

@@ -26,9 +26,15 @@ public class Regex {
 	private final Pattern comentarioLinha = Pattern.compile("\\/\\/");
 	private final Pattern comentarioBlocoInicio = Pattern.compile("\\/\\*");
 	private final Pattern comentarioBlocoFinal = Pattern.compile("\\*\\/");
+	private final Pattern identificadorError = Pattern.compile("[\\x21-\\x2F\\x3A-\\x40\\x5B-\\x60\\x7B-\\x7E]");
 	private Matcher matcher;
 	
 	public Regex () {}
+	
+	public boolean hasErrorId(String sequence) {
+		this.matcher = this.identificadorError.matcher(sequence);
+		return this.matcher.find();
+	}
 	
 	public boolean hasLineComment(String sequence) {
 		this.matcher = this.comentarioLinha.matcher(sequence);

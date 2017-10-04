@@ -128,8 +128,8 @@ public class AnalysisLexical {
 						if(regex.isDigito(a[i].substring(0)) || regex.isOpAritmeticos(a[i].substring(0)) 
 							|| regex.isOpLogicos(a[i].substring(0)) || regex.isOpRelacionais(a[i].substring(0))
 							|| regex.isSimbolo(a[i].substring(0))) {
-							System.out.println(linha + " Identificador Mal Formado: " + a[i]);
-							words.add("ERRO, >" + "Identificador Mal Formado: " + a[i] + " Linha: " + linha);
+							System.out.println(linha + " Identificador Malformado: " + a[i]);
+							words.add("ERRO, >" + "Identificador Malformado: " + a[i] + " Linha: " + linha);
 						} else {
 							System.out.println(linha + " Identificador: " + a[i]);
 							words.add("<identificador, >" + " Identificador: " + a[i] + " Linha: " + linha);

@@ -125,8 +125,15 @@ public class AnalysisLexical {
 						System.out.println(linha + " Reservada: " + a[i]);
 						words.add("<" + a[i] + " ,>" + " Palavra Reservada: " + a[i] + " Linha: " + linha);
 					} else if (regex.isIdentificador(a[i])) {
-						System.out.println(linha + " Identificador: " + a[i]);
-						words.add("<identificador, >" + " Identificador: " + a[i] + " Linha: " + linha);
+						if(regex.isDigito(a[i].substring(0)) || regex.isOpAritmeticos(a[i].substring(0)) 
+							|| regex.isOpLogicos(a[i].substring(0)) || regex.isOpRelacionais(a[i].substring(0))
+							|| regex.isSimbolo(a[i].substring(0))) {
+							System.out.println(linha + " Identificador Mau-Formado: " + a[i]);
+							words.add("ERRO, >" + "Identificador Mau-Formado: " + a[i] + " Linha: " + linha);
+						} else {
+							System.out.println(linha + " Identificador: " + a[i]);
+							words.add("<identificador, >" + " Identificador: " + a[i] + " Linha: " + linha);
+						}
 					} else if (regex.isNumero(a[i])) {
 						System.out.println(linha + " Numero: " + a[i]);
 						words.add("<numero, >" + " numero: " + a[i] + " Linha: " + linha);

@@ -11,7 +11,7 @@ import java.util.regex.Matcher;
  * 
  */
 public class Regex {
-	private final Pattern identificador = Pattern.compile("[a-zA-Z\\w*]\\b");
+	private final Pattern identificador = Pattern.compile("[a-zA-Z][\\w*]");
 	private final Pattern palavrasReservadas = Pattern.compile("(class|final|if|else|for|scan"
 							+ "|print|int|float|bool|true|false|string)");
 	private final Pattern digito = Pattern.compile("\\d");

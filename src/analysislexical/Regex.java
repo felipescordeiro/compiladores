@@ -21,9 +21,38 @@ public class Regex {
 	private final Pattern opRelacionais = Pattern.compile("(!=|=|<|<=|>|>=)");
 	private final Pattern opLogicos = Pattern.compile("!|\\|{2}|&&");
 	private final Pattern delimitador = Pattern.compile("(;|,|\\(|\\)|\\[|\\]|\\{|\\})");
+	private final Pattern cadeiaCaracteres = Pattern.compile("(\\p{Alpha}|\\d|[\\x20-\\x7E&&[^\\x22]]|\\\\x22)"); // \\ -> \ \\x22 -> "
+	private final Pattern simbolo = Pattern.compile("[\\x20-\\x7E&&[^\\x22]]");
+	private final Pattern comentarioLinha = Pattern.compile("\\/\\/");
+	private final Pattern comentarioBlocoInicio = Pattern.compile("\\/\\*");
+	private final Pattern comentarioBlocoFinal = Pattern.compile("\\*\\/");
 	private Matcher matcher;
 	
 	public Regex () {}
+	
+	public boolean hasLineComment(String sequence) {
+		this.matcher = this.comentarioLinha.matcher(sequence);
+		return this.matcher.find();
+	}
+	
+	public boolean hasInicialBlockComment(String sequence) {
+		this.matcher = this.comentarioBlocoInicio.matcher(sequence);
+		return this.matcher.find();
+	}
+	
+	public boolean hasFinalBlockComment(String sequence) {
+		this.matcher = this.comentarioBlocoFinal.matcher(sequence);
+		return this.matcher.find();
+	}
+	
+	public boolean isSimbolo(String sequence) {
+		this.matcher = this.simbolo.matcher(sequence);
+		return this.matcher.find();
+	}
+	public boolean isCadeia(String sequence) {
+		this.matcher = this.cadeiaCaracteres.matcher(sequence);
+		return this.matcher.find();
+	}
 	
 	public boolean isDelimitador(String sequence) {
 		this.matcher = this.delimitador.matcher(sequence);

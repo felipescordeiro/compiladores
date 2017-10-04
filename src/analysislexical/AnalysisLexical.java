@@ -150,56 +150,11 @@ public class AnalysisLexical {
 				
 			}			
 		}
-		/*		
-		for(int i = 0; i < lineArchive.size(); i++){
-			words = new HashMap<Integer, ArrayList<String>>();//hash da estrutura
-			
-			ArrayList<String> reserverdWord = new ArrayList<String>();// index 0 hashmap words
-			ArrayList<String> id = new ArrayList<String>();
-			ArrayList<String> letter = new ArrayList<String>();
-			
-			String word[] = lineArchive.get(i).split(" ");
-			for(int j = 0; j < word.length; j++){
-			//	System.out.println(word[j]);
-				word[j]= word[j].split(",")[0];
-				word[j]= word[j].split("\\(")[0];
-				word[j]= word[j].split("\\)")[0];
-				word[j]= word[j].split(";")[0];
-				if(regex.isPalavrasReservadas(word[j])){
-					System.out.println(i + " Reservada: " + word[j]);
-					reserverdWord.add(word[j]);
-				}else if(regex.isIdentificador(word[j])){
-					System.out.println(i +" Identificador: " + word[j]);
-					id.add(word[j]);
-				}else if(regex.isLetra(word[j])){
-					System.out.println(i + " Letra: " + word[j]);
-					letter.add(word[j]);
-				}else if(regex.isNumero(word[j])){
-					System.out.println(i + " Numero: " + word[j]);
-				}else if (regex.isDigito(word[j])) {
-					System.out.println(i + " Digito: " + word[j]);
-				}else if(regex.isOpRelacionais(word[j])){
-					System.out.println(i + " Operadores Relacionais: " + word[j]);
-				}else if(regex.isOpAritmeticos(word[j])){
-					System.out.println(i + " Operadores Aritmeticos: " + word[j]);
-				}else if(regex.isOpLogicos(word[j])){
-					System.out.println(i + " Operadores Logicos: " + word[j]);
-				}
-			}
-			words.put(0, reserverdWord);
-			words.put(1, id);
-			words.put(2, letter);
-			matrix.put(i, words);
-			System.out.println(words);
-		}
-		
-		*/
 	}
 	
 	public void writeLexical(){
 		System.out.println(matrix);
 		for (Map.Entry<Integer,HashMap<Integer, ArrayList<String>>> pair : matrix.entrySet()) {
-			//System.out.println("for 1:");
 		    for(Map.Entry<Integer, ArrayList<String>> pair2: matrix.get(pair.getKey()).entrySet()){		
 			   
 		    	//System.out.println("for 2 linha: " + pair.getKey() + " "+ pair2.getValue() + " " +pair2.getValue());	

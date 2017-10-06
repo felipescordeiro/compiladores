@@ -11,7 +11,7 @@ import java.util.regex.Matcher;
  * 
  */
 public class Regex {
-	private final Pattern identificador = Pattern.compile("[a-zA-Z][\\w*]");
+	private final Pattern identificador = Pattern.compile("[a-zA-Z\\w*]");
 	private final Pattern palavrasReservadas = Pattern.compile("(class|final|if|else|for|scan"
 							+ "|print|int|float|bool|true|false|string)");
 	private final Pattern digito = Pattern.compile("\\d");
@@ -23,9 +23,6 @@ public class Regex {
 	private final Pattern delimitador = Pattern.compile("(;|,|\\(|\\)|\\[|\\]|\\{|\\})");
 	private final Pattern cadeiaCaracteres = Pattern.compile("(\\p{Alpha}|\\d|[\\x20-\\x7E&&[^\\x22]]|\\\\x22)"); // \\ -> \ \\x22 -> "
 	private final Pattern simbolo = Pattern.compile("[\\x20-\\x7E&&[^\\x22]]");
-	private final Pattern comentarioLinha = Pattern.compile("\\/\\/");
-	private final Pattern comentarioBlocoInicio = Pattern.compile("\\/\\*");
-	private final Pattern comentarioBlocoFinal = Pattern.compile("\\*\\/");
 	private final Pattern identificadorError = Pattern.compile("[\\x21-\\x2F\\x3A-\\x40\\x5B-\\x60\\x7B-\\x7E]");
 	private Matcher matcher;
 	
@@ -35,22 +32,7 @@ public class Regex {
 		this.matcher = this.identificadorError.matcher(sequence);
 		return this.matcher.find();
 	}
-	
-	public boolean hasLineComment(String sequence) {
-		this.matcher = this.comentarioLinha.matcher(sequence);
-		return this.matcher.find();
-	}
-	
-	public boolean hasInicialBlockComment(String sequence) {
-		this.matcher = this.comentarioBlocoInicio.matcher(sequence);
-		return this.matcher.find();
-	}
-	
-	public boolean hasFinalBlockComment(String sequence) {
-		this.matcher = this.comentarioBlocoFinal.matcher(sequence);
-		return this.matcher.find();
-	}
-	
+		
 	public boolean isSimbolo(String sequence) {
 		this.matcher = this.simbolo.matcher(sequence);
 		return this.matcher.find();

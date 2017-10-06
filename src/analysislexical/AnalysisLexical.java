@@ -57,24 +57,41 @@ public class AnalysisLexical {
 			FileReader fileRead = new FileReader(pathStorage + nameArchive);
 		    BufferedReader file = new BufferedReader(fileRead);
 		    String line;
+		    int lineError = 0;
+		    boolean looking = false;
 			line = file.readLine();
-			String strLine;
 			while (line != null) {
-			  	String[] object =line.split(";");
-			  	if("".equals(object[0].trim())){
-			  		strLine = object[0];
-				}else{
-					if(!object[0].contains("{") && (!object[0].contains("}"))){
-						strLine = object[0]+";";
-					}else{
-						strLine = object[0];
+				if (line.contains("//")) { //verificando comentario de linha
+					//adiciona no array a linha contendo da primeira posicao ate a posicao inicial do //
+					line = line.substring(0, line.indexOf("//"));
+				}
+				if (line.contains("/*")){
+					lineError = numberLine;
+					looking = true;
+					if (line.contains("*/") && line.indexOf("*/") > line.indexOf("/*")) {						
+						line = line.substring(0, line.indexOf("/*")) + 
+								line.substring(line.indexOf("*/")+2, line.length());
+					} else if (line.contains("*/")) { // Exemplo: */ int a /* nao eh comentario
+						lineArchive.add(numberLine, line);
+					} else { //o */ nao se encontra na mesma linha, portanto, tem que fazer a leitura ate encontrar o final do comentario ou final do arquivo
+						//if (line.indexOf("/*") > 0)	aux.add(line.substring(0, line.indexOf("/*")));
+						line = line.substring(0, line.indexOf("/*"));						
 					}
 				}
-			  	lineArchive.add(numberLine, strLine);
+				if (looking) {
+					if (line.contains("*/")) {
+						line = line.substring(line.indexOf("*/")+2, line.length());
+						looking = false;
+					} else {
+						line = "";
+					}
+				}
+				lineArchive.add(numberLine, line);
 			  	line = file.readLine(); // le da segunda linha até a ultima linha
 			  	numberLine++;
 		    }
 			fileRead.close();
+			if (looking) lineArchive.add(lineError, "/**/"); //adicionando a forma de comentario em bloco no codigo para identificar como comentario de bloco malformado (nao fechado)
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -86,7 +103,7 @@ public class AnalysisLexical {
 	 */
 	public void printLines(){
 		for(int i = 0; i < lineArchive.size(); i++){
-			System.out.println(i + " = " +lineArchive.get(i));
+			System.out.println(i+1 + " = " +lineArchive.get(i));
 		}
 	}
 	
@@ -96,6 +113,10 @@ public class AnalysisLexical {
 			if(!"".equals(lineArchive.get(linha).trim())) {
 				String[] a = lineArchive.get(linha).split(" ");				
 				for(int i = 0; i < a.length; i++) {
+					if (a[i].contains("/**/")){
+						words.add("<ERRO, >" + " Comentario de blocos malformado: /* " + "Linha: " + linha);
+						break;
+					}
 					if(a[i].indexOf(";") >= 0) {
 						words.add("<delimitador, > " + " Delimitador: ;" + " Linha: " + linha);
 						a[i] = a[i].replace(";", " ");
@@ -128,7 +149,7 @@ public class AnalysisLexical {
 						if(regex.hasErrorId(a[i].substring(0)) || regex.isOpAritmeticos(a[i].substring(0)) 
 							|| regex.isOpLogicos(a[i].substring(0)) || regex.isOpRelacionais(a[i].substring(0))) {
 							System.out.println(linha + " Identificador Malformado: " + a[i]);
-							words.add("ERRO, >" + "Identificador Malformado: " + a[i] + " Linha: " + linha);
+							words.add("<ERRO, >" + "Identificador Malformado: " + a[i] + " Linha: " + linha);
 						} else {
 							System.out.println(linha + " Identificador: " + a[i]);
 							words.add("<identificador, >" + " Identificador: " + a[i] + " Linha: " + linha);
@@ -136,13 +157,7 @@ public class AnalysisLexical {
 					} else if (regex.isNumero(a[i])) {
 						System.out.println(linha + " Numero: " + a[i]);
 						words.add("<numero, >" + " numero: " + a[i] + " Linha: " + linha);
-					} else if (regex.isLetra(a[i])) {
-						System.out.println(linha + " letra: " + a[i]);
-						words.add("<letra, >" + " Letra: " + a[i] + " Linha: " + linha);
-					} else if (regex.isDigito(a[i])) {
-						System.out.println(linha + " Digito: " + a[i]);
-						words.add("<digito, >" + " Digito: " + a[i] + " Linha: " + linha);
-					} else if (regex.isOpAritmeticos(a[i])) {
+					}  else if (regex.isOpAritmeticos(a[i])) {
 						System.out.println(linha + " Operador Aritmetico: " + a[i]);
 						words.add("<" + a[i] + ", >" + " Linha: " + linha);
 					} else if (regex.isOpLogicos(a[i])) {

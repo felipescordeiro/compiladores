@@ -3,16 +3,24 @@
 int main(){
     
     int x, y, w, z;
+	x = 12 - 2;
+	x=12+2
+	x=3--4
     print("Vitoria %d x %d Bahia" x,y);
     scan("%d", &x);
     //print("Bahia ");
-    scan("%d", &y);
+    /* teste na linha */
+
+    scan("%d", &y); /* segundo teste */
+    /*
     print("\nFeirense "); 
-    scan("%d", &z);        
+    scan("%d", &z); */
     print("Juazeirense ", z);
     scan("%d", &z);
 
-  
+    scan;
+    get();
+    /*
     getch();
     return 0;
     

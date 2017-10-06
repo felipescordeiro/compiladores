@@ -15,7 +15,7 @@ public class Regex {
 	private final Pattern palavrasReservadas = Pattern.compile("(class|final|if|else|for|scan"
 							+ "|print|int|float|bool|true|false|string)");
 	private final Pattern digito = Pattern.compile("\\d");
-	private final Pattern numero = Pattern.compile("[-][\\t|\\n|\\x20|\\r]\\d*[\\.\\d++]");
+	private final Pattern numero = Pattern.compile("[-?][\t|\n|\\x20|\r]\\d*[\\.\\d+]");
 	private final Pattern letra = Pattern.compile("[a-zA-Z]");
 	private final Pattern opAritmeticos = Pattern.compile("(\\+|-|\\*|/|%)");
 	private final Pattern opRelacionais = Pattern.compile("(!=|=|<|<=|>|>=)");

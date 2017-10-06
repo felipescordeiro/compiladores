@@ -114,31 +114,40 @@ public class AnalysisLexical {
 				String[] a = lineArchive.get(linha).split(" ");				
 				for(int i = 0; i < a.length; i++) {
 					if (a[i].contains("/**/")){
+						System.out.println(linha + " Erro de comentario malformado");
 						words.add("<ERRO, >" + " Comentario de blocos malformado: /* " + "Linha: " + linha);
 						break;
 					}
 					if(a[i].indexOf(";") >= 0) {
+						System.out.println(linha + " Delimitador: ;");
 						words.add("<delimitador, > " + " Delimitador: ;" + " Linha: " + linha);
 						a[i] = a[i].replace(";", " ");
 					} if(a[i].indexOf(",") >= 0) {
+						System.out.println(linha + " Delimitador: ,");
 						words.add("<delimitador, > " + " Delimitador: ," + " Linha: " + linha);
 						a[i] = a[i].replace(",", " ");
 					} if(a[i].indexOf("(") >= 0) {
+						System.out.println(linha + " Delimitador: (");
 						words.add("<delimitador, > " + " Delimitador: (" + " Linha: " + linha);
 						a[i] = a[i].replace("(", " ");
 					} if(a[i].indexOf(")") >= 0) {
+						System.out.println(linha + " Delimitador: )");
 						words.add("<delimitador, > " + " Delimitador: )" + " Linha: " + linha);
 						a[i] = a[i].replace(")", " ");
 					} if(a[i].indexOf("[") >= 0) {
+						System.out.println(linha + " Delimitador: [");
 						words.add("<delimitador, > " + " Delimitador: [" + " Linha: " + linha);
 						a[i] = a[i].replace("[", " ");
 					} if(a[i].indexOf("]") >= 0) {
+						System.out.println(linha + " Delimitador: ]");
 						words.add("<delimitador, > " + " Delimitador: ]" + " Linha: " + linha);
 						a[i] = a[i].replace("]", " ");
 					} if(a[i].indexOf("{") >= 0) {
+						System.out.println(linha + " Delimitador: {");
 						words.add("<delimitador, > " + " Delimitador: {" + " Linha: " + linha);
 						a[i] = a[i].replace("{", " ");
 					} if(a[i].indexOf("}") >= 0) {
+						System.out.println(linha + " Delimitador: }");
 						words.add("<delimitador, > " + " Delimitador: }" + " Linha: " + linha);
 						a[i] = a[i].replace("}", " ");
 					}

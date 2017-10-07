@@ -11,19 +11,20 @@ import java.util.regex.Matcher;
  * 
  */
 public class Regex {
-	private final Pattern identificador = Pattern.compile("[a-zA-Z\\w*]");
+	private final Pattern identificador = Pattern.compile("[a-zA-Z]w*");
 	private final Pattern palavrasReservadas = Pattern.compile("(class|final|if|else|for|scan"
 							+ "|print|int|float|bool|true|false|string)");
 	private final Pattern digito = Pattern.compile("\\d");
-	private final Pattern numero = Pattern.compile("[-?][\t|\n|\\x20|\r]\\d*[\\.\\d+]");
+	private final Pattern numero = Pattern.compile("[-?][\t|\n|\\x20|\r]*\\d*[\\.\\d+]");
 	private final Pattern letra = Pattern.compile("[a-zA-Z]");
 	private final Pattern opAritmeticos = Pattern.compile("(\\+|-|\\*|/|%)");
 	private final Pattern opRelacionais = Pattern.compile("(!=|=|<|<=|>|>=)");
 	private final Pattern opLogicos = Pattern.compile("!|\\|{2}|&&");
 	private final Pattern delimitador = Pattern.compile("(;|,|\\(|\\)|\\[|\\]|\\{|\\})");
-	private final Pattern cadeiaCaracteres = Pattern.compile("(\\p{Alpha}|\\d|[\\x20-\\x7E&&[^\\x22]]|\\\\x22)"); // \\ -> \ \\x22 -> "
+	private final Pattern cadeiaCaracteres = Pattern.compile("(\b\"w*\"\b)"); // \\ -> \ \\x22 -> "
 	private final Pattern simbolo = Pattern.compile("[\\x20-\\x7E&&[^\\x22]]");
 	private final Pattern identificadorError = Pattern.compile("[\\x21-\\x2F\\x3A-\\x40\\x5B-\\x60\\x7B-\\x7E]");
+
 	private Matcher matcher;
 	
 	public Regex () {}
@@ -125,4 +126,6 @@ public class Regex {
 		this.matcher = this.opLogicos.matcher(sequence);
 		return this.matcher.find();
 	}
+
+
 }

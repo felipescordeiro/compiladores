@@ -87,7 +87,7 @@ public class AnalysisLexical {
 					}
 				}
 				lineArchive.add(numberLine, line);
-			  	line = file.readLine(); // le da segunda linha at� a ultima linha
+			  	line = file.readLine(); // le da segunda linha at� a ultima linha
 			  	numberLine++;
 		    }
 			fileRead.close();
@@ -111,8 +111,9 @@ public class AnalysisLexical {
 		ArrayList<String> words = new ArrayList<String>();
 		for(int linha = 0; linha < lineArchive.size(); linha++){
 			if(!"".equals(lineArchive.get(linha).trim())) {
-				String[] a = lineArchive.get(linha).split(" ");				
+				String[] a = lineArchive.get(linha).split(" ");	
 				for(int i = 0; i < a.length; i++) {
+					System.out.println("word: " + a[i]);
 					if (a[i].contains("/**/")){
 						System.out.println(linha + " Erro de comentario malformado");
 						words.add("<ERRO, >" + " Comentario de blocos malformado: /* " + "Linha: " + linha);
@@ -151,35 +152,222 @@ public class AnalysisLexical {
 						words.add("<delimitador, > " + " Delimitador: }" + " Linha: " + linha);
 						a[i] = a[i].replace("}", " ");
 					}
-					if(regex.isPalavrasReservadas(a[i])) {
-						System.out.println(linha + " Reservada: " + a[i]);
-						words.add("<" + a[i] + " ,>" + " Palavra Reservada: " + a[i] + " Linha: " + linha);
-					} else if (regex.isIdentificador(a[i])) {
-						if(regex.hasErrorId(a[i].substring(0)) || regex.isOpAritmeticos(a[i].substring(0)) 
-							|| regex.isOpLogicos(a[i].substring(0)) || regex.isOpRelacionais(a[i].substring(0))) {
-							System.out.println(linha + " Identificador Malformado: " + a[i]);
-							words.add("<ERRO, >" + "Identificador Malformado: " + a[i] + " Linha: " + linha);
-						} else {
-							System.out.println(linha + " Identificador: " + a[i]);
-							words.add("<identificador, >" + " Identificador: " + a[i] + " Linha: " + linha);
+					
+					String sequence = a[i];
+					if(regex.isPalavrasReservadas(sequence)) {
+						words = howEstructure(words, linha, sequence);
+					} else if (regex.isNumero(sequence)) {
+						words = howEstructure(words, linha, sequence);
+					} /*else if (regex.isDigito(sequence)) {
+						System.out.println(linha + " Digito: " + sequence);
+						words.add("<digito, >" + " digito: " + sequence + " Linha: " + linha);
+					}*/ else if (regex.isOpAritmeticos(sequence)) {
+						words = howEstructure(words, linha, sequence);
+					} else if (regex.isOpLogicos(sequence)) {
+						words = howEstructure(words, linha, sequence);
+					} else if (regex.isOpRelacionais(sequence)) {
+						words = howEstructure(words, linha, sequence);
+					} else if (regex.isIdentificador(sequence)) {
+						if(regex.hasErrorId(sequence.substring(0)) || regex.isOpAritmeticos(sequence.substring(0)) 
+								|| regex.isOpLogicos(sequence.substring(0)) || regex.isOpRelacionais(sequence.substring(0))) {
+								System.out.println(linha + " Identificador Malformado: " + sequence);
+								words.add("<ERRO, >" + "Identificador Malformado: " + sequence + " Linha: " + linha);
+							} else {
+								System.out.println(linha + " Identificador: " + sequence);
+								words.add("<identificador, >" + " Identificador: " + sequence + " Linha: " + linha);
+							}
 						}
-					} else if (regex.isNumero(a[i])) {
-						System.out.println(linha + " Numero: " + a[i]);
-						words.add("<numero, >" + " numero: " + a[i] + " Linha: " + linha);
-					}  else if (regex.isOpAritmeticos(a[i])) {
-						System.out.println(linha + " Operador Aritmetico: " + a[i]);
-						words.add("<" + a[i] + ", >" + " Linha: " + linha);
-					} else if (regex.isOpLogicos(a[i])) {
-						System.out.println(linha + " Operador Logico: " + a[i]);
-						words.add("<" + a[i] + ", >" + " Linha: " + linha);
-					} else if (regex.isOpRelacionais(a[i])) {
-						System.out.println(linha + " Operador Relacional: " + a[i]);
-						words.add("<" + a[i] + ", >" + " Linha: " + linha);
-					}
 				}
 				
 			}			
 		}
+	}
+	
+	public ArrayList<String> howEstructure(ArrayList<String> words, int linha, String sequence){
+		
+		if(regex.isPalavrasReservadas(sequence)){
+			//sequence.replace("\\+|-|\\*|/|%", " ");
+			words = haveReservedWord(words, linha, sequence);
+		}
+		if(regex.isOpAritmeticos(sequence)){
+			//sequence.replace("\\+|-|\\*|/|%", " ");
+			words = haveAritmethic(words, linha, sequence);
+		}
+		if(regex.isOpLogicos(sequence.substring(0))){
+			words = haveLogics(words, linha, sequence);
+			
+		}
+		if(regex.isOpRelacionais(sequence.substring(0))){
+			words = haveRelational(words, linha, sequence);
+			
+		}
+		if(regex.isNumero(sequence)){
+			words = haveNumber(words, linha, sequence);
+			
+		}
+			
+		
+		
+		return words;
+	}
+	
+	private ArrayList<String> haveReservedWord(ArrayList<String> words,
+			int linha, String sequence) {
+		String parts[] = sequence.split(" ");
+		for(int x = 0; x < parts.length; x++){
+			if("class".equals("" + parts[x]) ){
+				System.out.println(linha + " Palavra reservada: " + parts[x]);
+				words.add("<" + parts[x] + ", >" + " Palavra reservada: " +" Linha: " + linha);
+			} else if("final".equals("" + parts[x])){
+				System.out.println(linha + " Palavra reservada: " + parts[x]);
+				words.add("<" + parts[x] + ", >" + " Palavra reservada: " +" Linha: " + linha);
+			}else if("if".equals("" + parts[x])){
+				System.out.println(linha + " Palavra reservada: " + parts[x]);
+				words.add("<" + parts[x] + ", >" + " Palavra reservada: " +" Linha: " + linha);
+			} else if("else".equals("" + parts[x])){
+				System.out.println(linha + " Palavra reservada: " + parts[x]);
+				words.add("<" + parts[x] + ", >" + " Palavra reservada: " +" Linha: " + linha);
+			}else if("for".equals("" + parts[x])){
+				System.out.println(linha + " Palavra reservada: " + parts[x]);
+				words.add("<" + parts[x] + ", >" + " Palavra reservada: " +" Linha: " + linha);
+			}else if("scan".equals("" + parts[x])){
+				System.out.println(linha + " Palavra reservada: " + parts[x]);
+				words.add("<" + parts[x] + ", >" + " Palavra reservada: " +" Linha: " + linha);
+			}else if("print".equals("" + parts[x])){
+				System.out.println(linha + " Palavra reservada: " + parts[x]);
+				words.add("<" + parts[x] + ", >" + " Palavra reservada: " +" Linha: " + linha);
+			} else if("int".equals("" + parts[x])){
+				System.out.println(linha + " Palavra reservada: " + parts[x]);
+				words.add("<" + parts[x] + ", >" + " Palavra reservada: " +" Linha: " + linha);
+			}else if("float".equals("" + parts[x])){
+				System.out.println(linha + " Palavra reservada: " + parts[x]);
+				words.add("<" + parts[x] + ", >" + " Palavra reservada: " +" Linha: " + linha);
+			}else if("bool".equals("" + parts[x])){
+				System.out.println(linha + " Palavra reservada: " + parts[x]);
+				words.add("<" + parts[x] + ", >" + " Palavra reservada: " +" Linha: " + linha);
+			} else if("false".equals("" + parts[x])){
+				System.out.println(linha + " Palavra reservada: " + parts[x]);
+				words.add("<" + parts[x] + ", >" + " Palavra reservada: " +" Linha: " + linha);
+			}else if("true".equals("" + parts[x])){
+				System.out.println(linha + " Palavra reservada: " + parts[x]);
+				words.add("<" + parts[x] + ", >" + " Palavra reservada: " +" Linha: " + linha);
+			}else if("string".equals("" + parts[x])){
+				System.out.println(linha + " Palavra reservada: " + parts[x]);
+				words.add("<" + parts[x] + ", >" + " Palavra reservada: " +" Linha: " + linha);
+			}else if(regex.isCadeia(parts[x])){
+				System.out.println(linha + " Cadeia de caracteres: " + parts[x]);
+				words.add("<" + parts[x] + ", >" + " Cadeia de caracteres: " +" Linha: " + linha);
+			}
+		
+		}
+		return words;
+	}
+
+	private ArrayList<String> haveNumber(ArrayList<String> words, int linha,
+			String sequence) {
+		for(int x = 0; x < sequence.length(); x++){
+			if("0".equals("" + sequence.charAt(x)) ){
+				System.out.println(linha + " Operador Número: " + sequence.charAt(x));
+				words.add("<" + sequence.charAt(x) + ", >" + " Operador Número: " +" Linha: " + linha);
+			} else if("1".equals("" + sequence.charAt(x))){
+				System.out.println(linha + " Operador Número: " + sequence.charAt(x));
+				words.add("<" + sequence.charAt(x) + ", >" + " Operador Número: " +" Linha: " + linha);
+			}else if("2".equals("" + sequence.charAt(x))){
+				System.out.println(linha + " Operador Número: " + sequence.charAt(x));
+				words.add("<" + sequence.charAt(x) + ", >" + " Operador Número: " +" Linha: " + linha);
+			} else if("3".equals("" + sequence.charAt(x))){
+				System.out.println(linha + " Operador Número: " + sequence.charAt(x));
+				words.add("<" + sequence.charAt(x) + ", >" + " Operador Número: " +" Linha: " + linha);
+			}else if("4".equals("" + sequence.charAt(x))){
+				System.out.println(linha + " Operador Número: " + sequence.charAt(x));
+				words.add("<" + sequence.charAt(x) + ", >" + " Operador Número: " +" Linha: " + linha);
+			}else if("5".equals("" + sequence.charAt(x))){
+				System.out.println(linha + " Operador Número: " + sequence.charAt(x));
+				words.add("<" + sequence.charAt(x) + ", >" + " Operador Número: " +" Linha: " + linha);
+			}else if("6".equals("" + sequence.charAt(x))){
+				System.out.println(linha + " Operador Número: " + sequence.charAt(x));
+				words.add("<" + sequence.charAt(x) + ", >" + " Operador Número: " +" Linha: " + linha);
+			} else if("7".equals("" + sequence.charAt(x))){
+				System.out.println(linha + " Operador Número: " + sequence.charAt(x));
+				words.add("<" + sequence.charAt(x) + ", >" + " Operador Número: " +" Linha: " + linha);
+			}else if("8".equals("" + sequence.charAt(x))){
+				System.out.println(linha + " Operador Número: " + sequence.charAt(x));
+				words.add("<" + sequence.charAt(x) + ", >" + " Operador Número: " +" Linha: " + linha);
+			}else if("9".equals("" + sequence.charAt(x))){
+				System.out.println(linha + " Operador Número: " + sequence.charAt(x));
+				words.add("<" + sequence.charAt(x) + ", >" + " Operador Número: " +" Linha: " + linha);
+			}
+		
+		}
+		return words;
+	}
+
+	private ArrayList<String> haveRelational(ArrayList<String> words,
+			int linha, String sequence) {
+		for(int x = 0; x < sequence.length(); x++){
+			if("!=".equals("" + sequence.charAt(x)) ){
+				System.out.println(linha + " Operador Relacional: " + sequence.charAt(x));
+				words.add("<" + sequence.charAt(x) + ", >" + " Operador Relacional: " +" Linha: " + linha);
+			} else if("=".equals("" + sequence.charAt(x))){
+				System.out.println(linha + " Operador Relacional: " + sequence.charAt(x));
+				words.add("<" + sequence.charAt(x) + ", >" + " Operador Relacional: " +" Linha: " + linha);
+			}else if("<".equals("" + sequence.charAt(x))){
+				System.out.println(linha + " Operador Relacional: " + sequence.charAt(x));
+				words.add("<" + sequence.charAt(x) + ", >" + " Operador Relacional: " +" Linha: " + linha);
+			} else if("<=".equals("" + sequence.charAt(x))){
+				System.out.println(linha + " Operador Relacional: " + sequence.charAt(x));
+				words.add("<" + sequence.charAt(x) + ", >" + " Operador Relacional: " +" Linha: " + linha);
+			}else if(">".equals("" + sequence.charAt(x))){
+				System.out.println(linha + " Operador Relacional: " + sequence.charAt(x));
+				words.add("<" + sequence.charAt(x) + ", >" + " Operador Relacional: " +" Linha: " + linha);
+			}else if(">=".equals("" + sequence.charAt(x))){
+				System.out.println(linha + " Operador Relacional: " + sequence.charAt(x));
+				words.add("<" + sequence.charAt(x) + ", >" + " Operador Relacional: " +" Linha: " + linha);
+			}
+		
+		}
+		return words;
+	}
+
+	private ArrayList<String> haveLogics(ArrayList<String> words, int linha,
+			String sequence) {
+		for(int x = 0; x < sequence.length(); x++){
+			if("!".equals("" + sequence.charAt(x)) ){
+				System.out.println(linha + " Operador Lógico: " + sequence.charAt(x));
+				words.add("<" + sequence.charAt(x) + ", >" + " Operador Lógico: " +" Linha: " + linha);
+			} else if("\\|{2}".equals("" + sequence.charAt(x))){
+				System.out.println(linha + " Operador Lógico: " + sequence.charAt(x));
+				words.add("<" + sequence.charAt(x) + ", >" + " Operador Lógico: " +" Linha: " + linha);
+			}else if("&&".equals("" + sequence.charAt(x))){
+				System.out.println(linha + " Operador Lógico: " + sequence.charAt(x));
+				words.add("<" + sequence.charAt(x) + ", >" + " Operador Lógico: " +" Linha: " + linha);
+			}
+		
+		}
+		return words;
+	}
+
+	public ArrayList<String> haveAritmethic(ArrayList<String> words, int linha, String sequence){
+		for(int x = 0; x < sequence.length(); x++){
+			if("-".equals("" + sequence.charAt(x)) ){
+				System.out.println(linha + " Operador Aritmetico: " + sequence.charAt(x));
+				words.add("<" + sequence.charAt(x) + ", >" + " Linha: " + linha);
+			} else if("+".equals("" + sequence.charAt(x))){
+				System.out.println(linha + " Operador Aritmetico: " + sequence.charAt(x));
+				words.add("<" + sequence.charAt(x) + ", >" + " Linha: " + linha);
+			}else if("/".equals("" + sequence.charAt(x))){
+				System.out.println(linha + " Operador Aritmetico: " + sequence.charAt(x));
+				words.add("<" + sequence.charAt(x) + ", >" + " Linha: " + linha);
+			}else if("*".equals("" + sequence.charAt(x))){
+				System.out.println(linha + " Operador Aritmetico: " + sequence.charAt(x));
+				words.add("<" + sequence.charAt(x) + ", >" + " Linha: " + linha);
+			}else if("%".equals("" + sequence.charAt(x))){
+				System.out.println(linha + " Operador Aritmetico: " + sequence.charAt(x));
+				words.add("<" + sequence.charAt(x) + ", >" + " Linha: " + linha);
+			}
+		
+		}
+		return words;
 	}
 	
 	public void writeLexical(){

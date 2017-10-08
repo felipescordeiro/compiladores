@@ -291,10 +291,8 @@ public class AnalysisLexical {
 					for(int i = 0; i < count; i++) words.add("<%, >" + " Operador Aritmeticos: %" + " Linha: " + linha);
 					sequence = sequence.replaceAll("&", " ");
 				}
-				if(sequence.indexOf("-") >= 0){
-					count = sequence.length()-sequence.replace("-", "").length();
+				if(sequence.indexOf("-") >= 0){					
 					String[] r;
-					boolean notNum = true;
 					r = sequence.split("-");
 					for(int i = 0; i < r.length; i++){
 						if(!r[i].isEmpty()) {
@@ -302,32 +300,30 @@ public class AnalysisLexical {
 							int countDots = r[i].length()-r[i].replace(".", "").length();
 							if(countDots>1){
 								words.add("<ERRO, > Numero malformado: " + r[i] + " Linha: " + linha);
-								sequence = sequence.replace(r[i], "");
 								System.out.println(linha + " ERRO numero malformado " + sequence);
+								sequence = sequence.replace(r[i].substring(1), "");
 							}
 							else if(countDots == 1) {
-								if(regex.isNumero(r[i])){
+								if(!"".equals(r[i].charAt(r[i].indexOf(".")+1))){
 									words.add("<" + r[i] + ", > Numero Linha: " + linha);
 									sequence = sequence.replaceFirst("-?[\\x09|\\x0A|\\x0D|\\x20]*?\\b[0-9]+(\\x2E[0-9]+)?\\b", " ");
 									System.out.println(linha + " Numero: " + r[i]);
-									notNum = false;
 								}else {
 									words.add("<ERRO, > Numero malformado Linha: " + linha);
-									System.out.println(linha + " ERRO Numero malformado");
+									sequence = sequence.replace(r[i].substring(1), "");
+									System.out.println(linha + " ERRO Numero malformado " + sequence);
 								}
 							} else if(regex.isNumero(r[i])){
 								words.add("<" + r[i] + ", > Numero Linha: " + linha);
 								sequence = sequence.replaceFirst("-?[\\x09|\\x0A|\\x0D|\\x20]*?\\b[0-9]+\\b", " ");
-								//System.out.println("===================" + sequence);
-								notNum = false;
+								System.out.println(linha + " Numero: " + r[i]);
 							}
 						}
 					}
-					if(notNum) {
-						System.out.println(linha + " Operador Aritmetico: -");
-						for(int i = 0; i < count; i++) words.add("<-, >" + " Operador Aritmetico: -" + " Linha: " + linha);
-						sequence = sequence.replaceAll("-", " ");						
-					}
+					count = sequence.length()-sequence.replace("-", "").length();
+					System.out.println(linha + " Operador Aritmetico: -");
+					for(int i = 0; i < count; i++) words.add("<-, >" + " Operador Aritmetico: -" + " Linha: " + linha);
+					sequence = sequence.replaceAll("-", " ");		
 				}
 				//palavra reservada
 				if(regex.isPalavrasReservadas(sequence)) {
@@ -357,14 +353,27 @@ public class AnalysisLexical {
 						}
 					}
 				}
-				if(regex.isNumero(sequence)){
-					String[] r = sequence.split(" ");
+				if(regex.isNumero(sequence)){					
+					String[] r = sequence.split(" ");		
 					for(int i = 0; i < r.length; i++){
-						if(r[i].isEmpty()) continue;
-						if(regex.isNumero(r[i])){
-							words.add("<num, > Numero: " + r[i] + " Linha: " + linha);
-							System.out.println(linha + " fffNumero: " + r[i]);						
-							sequence.replaceFirst(r[i], " ");
+						if(!r[i].isEmpty()) {
+							int countDots = r[i].length()-r[i].replace(".", "").length();
+							if(countDots>1){
+								words.add("<ERRO, > Numero malformado: " + r[i] + " Linha: " + linha);
+								System.out.println(linha + " ERRO numero malformado " + sequence);
+								sequence = sequence.replace(r[i].substring(1), "");
+							}
+							else if(countDots == 1) {
+								if(r[i].indexOf(".")+1 < r[i].length()){
+									words.add("<" + r[i] + ", > Numero Linha: " + linha);
+									sequence = sequence.replaceFirst("-?[\\x09|\\x0A|\\x0D|\\x20]*?\\b[0-9]+(\\x2E[0-9]+)?\\b", " ");
+									System.out.println(linha + " Numero: " + r[i]);
+								}else {
+									words.add("<ERRO, > Numero malformado Linha: " + linha);
+									sequence = sequence.replace(r[i], " ");
+									System.out.println(linha + " ERRO Numero malformado");
+								}
+							}
 						}
 						else continue;
 					}

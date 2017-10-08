@@ -12,7 +12,7 @@ import java.util.Properties;
 
 /**
  * 
- * @author Felipe Cordeiro
+ * @author Felipe Cordeiro && Lucas Morais
  *
  */
 
@@ -86,7 +86,7 @@ public class AnalysisLexical {
 					} else line = "";
 				}
 				if(!looking && line.contains("\"") && line.lastIndexOf("\"") == line.indexOf("\"")) line = "/*\"*/";				
-				lineArchive.add(numberLine, line);
+				lineArchive.add(numberLine, line.trim());
 			  	line = file.readLine(); // le da segunda linha ate a ultima linha
 			  	numberLine++;
 		    }
@@ -113,11 +113,6 @@ public class AnalysisLexical {
 		int count;
 		for(int linha = 0; linha < lineArchive.size(); linha++){
 			if(!"".equals(lineArchive.get(linha).trim())) {
-				String aux2;
-				if(lineArchive.get(linha).contains("\"")){
-					int beginIndex = lineArchive.get(linha).indexOf("\""), endIndex = lineArchive.get(linha).lastIndexOf("\"");
-					aux2 = lineArchive.get(linha).substring(beginIndex, endIndex);
-				}
 				String sequence = lineArchive.get(linha);
 				if (sequence.contains("/**/")){
 					System.out.println(linha + " Erro de comentario malformado");
@@ -295,6 +290,29 @@ public class AnalysisLexical {
 					String[] r;
 					r = sequence.split("-");
 					for(int i = 0; i < r.length; i++){
+						if(regex.isPalavrasReservadas(r[i])){
+							String[] aux = r[i].split(" ");
+							for(int j = 0; j < aux.length; j++){
+								if(aux[j].isEmpty()) continue;
+								else if(regex.isPalavrasReservadas(aux[j])){
+									System.out.println(linha + " Palavra Reservada: " + aux[j]);
+									words.add("<" + aux[j] + ", >" + " Palavra Reservada Linha: " + linha);
+									sequence = sequence.replaceFirst(aux[j], "");
+									r[i] = r[i].replaceFirst(aux[j], "");
+								} else continue;
+							}
+						}else if(regex.isIdentificador(r[i])){
+							String[] aux = r[i].split(" ");
+							for(int j = 0; j < aux.length; j++){
+								if(aux[j].isEmpty()) continue;
+								else if(regex.isIdentificador(aux[j])){
+									System.out.println(linha + " Identificador: " + aux[j]);
+									words.add("<id, >" + " Identificador: " + aux[j] + " Linha: " + linha);
+									sequence = sequence.replaceFirst(aux[j], "");
+									r[i] = r[i].replaceFirst(aux[j], "");
+								} else continue;
+							}
+						}
 						if(!r[i].isEmpty()) {
 							r[i] = "-" + r[i];
 							int countDots = r[i].length()-r[i].replace(".", "").length();
@@ -332,31 +350,14 @@ public class AnalysisLexical {
 					String[] r = sequence.split(" ");
 					for(int i = 0; i < r.length; i++){
 						if(r[i].isEmpty()) continue;
-						System.out.println(linha + "Palavra Reservada: " + r[i] + " Linha: " + linha);
-						words.add("<" + r[i] + ", >" + " Palavra Reservada Linha: " + linha);
-						sequence = sequence.replaceFirst(r[i], "");						
+						else if(regex.isPalavrasReservadas(r[i])){
+							System.out.println(linha + " Palavra Reservada: " + r[i]);
+							words.add("<" + r[i] + ", >" + " Palavra Reservada Linha: " + linha);
+							sequence = sequence.replaceFirst(r[i], "");	
+						} else continue;				
 					}
 				}
-				if(regex.isIdentificador(sequence)){
-					String[] r = sequence.split(" ");
-					for(int i = 0; i < r.length; i++){
-						if(r[i].isEmpty()) continue;
-						else if(regex.hasErrorId(r[i])){ //contem uma caractere nao aceitavel
-							System.out.println(linha + " Identificador malformado: " + r[i]);
-							words.add("<ERROR, > Identificador malformado: " + r[i] + " Linha: " + linha);
-							sequence = sequence.replaceFirst(r[i], "");
-						} else if(!r[i].substring(0, 1).matches("[a-zA-Z]")){ //primeiro digito nao eh uma letra 
-							System.out.println(linha + " Identificador malformadoxxxx: " + r[i]);
-							words.add("<ERROR, > Identificador malformado: " + r[i] + " Linha: " + linha);
-							sequence = sequence.replaceFirst(r[i], "");
-						} else {
-							System.out.println(linha + " Identificador: " + r[i]);
-							words.add("<id, >" + " Identificador: " + r[i] + " Linha: " + linha);
-							sequence = sequence.replaceFirst(r[i], "");
-						}
-					}
-				}
-				if(regex.isNumero(sequence)){					
+				if(regex.isNumero(sequence)){				
 					String[] r = sequence.split(" ");		
 					for(int i = 0; i < r.length; i++){
 						if(!r[i].isEmpty()) {
@@ -376,11 +377,36 @@ public class AnalysisLexical {
 									sequence = sequence.replace(r[i], " ");
 									System.out.println(linha + " ERRO Numero malformado");
 								}
+							} else {
+								if (r[i].matches("\\d*")){
+									words.add("<" + r[i] + ", > Numero Linha: " + linha);
+									sequence = sequence.replaceFirst(r[i], " ");
+									System.out.println(linha + " Numero: " + r[i]);
+								}
 							}
 						}
 						else continue;
 					}
-				}					
+				}		
+				if(regex.isIdentificador(sequence)){
+					String[] r = sequence.split(" ");
+					for(int i = 0; i < r.length; i++){
+						if(r[i].isEmpty()) continue;
+						else if(regex.hasErrorId(r[i])){ //contem uma caractere nao aceitavel
+							System.out.println(linha + " Identificador malformado:" + r[i]);
+							words.add("<ERROR, > Identificador malformado: " + r[i] + " Linha: " + linha);
+							sequence = sequence.replaceFirst(r[i], "");
+						} else if(!r[i].substring(0, 1).matches("[a-zA-Z]")){ //primeiro digito nao eh uma letra 
+							System.out.println(linha + " Identificador malformado: " + r[i]);
+							words.add("<ERROR, > Identificador malformado: " + r[i] + " Linha: " + linha);
+							sequence = sequence.replaceFirst(r[i], "");
+						} else {
+							System.out.println(linha + " Identificador: " + r[i]);
+							words.add("<id, >" + " Identificador: " + r[i] + " Linha: " + linha);
+							sequence = sequence.replaceFirst(r[i], "");
+						}
+					}
+				}							
 			}			
 		}
 	}

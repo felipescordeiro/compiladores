@@ -307,7 +307,7 @@ public class AnalysisLexical {
 								if(!"".equals(r[i].charAt(r[i].indexOf(".")+1))){
 									words.add("<" + r[i] + ", > Numero Linha: " + linha);
 									sequence = sequence.replaceFirst("-?[\\x09|\\x0A|\\x0D|\\x20]*?\\b[0-9]+(\\x2E[0-9]+)?\\b", " ");
-									System.out.println(linha + " Numero: " + r[i]);
+									System.out.println(linha + " Numero: " + sequence);
 								}else {
 									words.add("<ERRO, > Numero malformado Linha: " + linha);
 									sequence = sequence.replace(r[i].substring(1), "");
@@ -321,8 +321,10 @@ public class AnalysisLexical {
 						}
 					}
 					count = sequence.length()-sequence.replace("-", "").length();
-					System.out.println(linha + " Operador Aritmetico: -");
-					for(int i = 0; i < count; i++) words.add("<-, >" + " Operador Aritmetico: -" + " Linha: " + linha);
+					for(int i = 0; i < count; i++) {
+						System.out.println(linha + " Operador Aritmetico: -");
+						words.add("<-, >" + " Operador Aritmetico: -" + " Linha: " + linha);
+					}
 					sequence = sequence.replaceAll("-", " ");		
 				}
 				//palavra reservada
@@ -330,6 +332,7 @@ public class AnalysisLexical {
 					String[] r = sequence.split(" ");
 					for(int i = 0; i < r.length; i++){
 						if(r[i].isEmpty()) continue;
+						System.out.println(linha + "Palavra Reservada: " + r[i] + " Linha: " + linha);
 						words.add("<" + r[i] + ", >" + " Palavra Reservada Linha: " + linha);
 						sequence = sequence.replaceFirst(r[i], "");						
 					}

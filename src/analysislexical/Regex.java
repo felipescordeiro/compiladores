@@ -14,19 +14,50 @@ public class Regex {
 	private final Pattern identificador = Pattern.compile("[a-zA-Z]\\w*");
 	private final Pattern palavrasReservadas = Pattern.compile("(class|final|if|else|for|scan"
 							+ "|print|int|float|bool|true|false|string)");
-	private final Pattern digito = Pattern.compile("\\d");
-	private final Pattern numero = Pattern.compile("[-?][\t|\n|\\x20|\r]*\\d*[\\.\\d+]");
+	private final Pattern digito = Pattern.compile("\\d"); 
+	private final Pattern numero = Pattern.compile("-?[\\x09|\\x0A|\\x0D|\\x20]*?\\b[0-9]+(\\x2E[0-9]+)?\\b");
 	private final Pattern letra = Pattern.compile("[a-zA-Z]");
 	private final Pattern opAritmeticos = Pattern.compile("(\\+|-|\\*|/|%)");
 	private final Pattern opRelacionais = Pattern.compile("(!=|=|<|<=|>|>=)");
 	private final Pattern opLogicos = Pattern.compile("!|\\|{2}|&&");
 	private final Pattern delimitador = Pattern.compile("(;|,|\\(|\\)|\\[|\\]|\\{|\\})");
 	private final Pattern identificadorError = Pattern.compile("\\W");
-
+	private final Pattern quotes = Pattern.compile("\"");
+	private final Pattern cadeia = Pattern.compile("\".*\"");
 	private Matcher matcher;
 	
 	public Regex () {}
 	
+	public String groupIdentificador(String sequence) {
+		try{
+			this.matcher = this.identificador.matcher(sequence);
+			return this.matcher.group();
+		}catch (Exception e){
+			return sequence;
+		}		
+	}
+	
+	public String groupReservada(String sequence){
+		this.matcher = this.palavrasReservadas.matcher(sequence);
+		return this.matcher.group();
+	}
+	
+	public String groupNum(String sequence) {
+		try{
+			this.matcher = this.numero.matcher(sequence);
+			return this.matcher.group();
+		}catch (Exception e){
+			return sequence;
+		}
+	}
+	public boolean hasQuotes(String sequence) {
+		this.matcher = this.quotes.matcher(sequence);
+		return this.matcher.find();
+	}
+	public int countQuotes(String sequence) {
+		this.matcher = this.cadeia.matcher(sequence);
+		return this.matcher.groupCount();
+	}
 	public boolean hasErrorId(String sequence) {
 		this.matcher = this.identificadorError.matcher(sequence);
 		return this.matcher.find();
@@ -78,12 +109,12 @@ public class Regex {
 	}
 	
 	/**
-	 * Identify if sequence has 'Letra'
-	 * @param sequence string used for lexical analysis
+	 * Identify if char is 'Letra'
+	 * @param char used for lexical analysis
 	 * @return true or false
 	 */
-	public boolean isLetra(String sequence){
-		this.matcher = this.letra.matcher(sequence);
+	public boolean isLetra(CharSequence ch){
+		this.matcher = this.letra.matcher(ch);
 		return this.matcher.find();
 	}
 	

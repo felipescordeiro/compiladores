@@ -10,7 +10,12 @@ int main(){
     scan("%d", &x);
     //print("Bahia ");
     /* teste na linha */
-
+    "abc && 23
+    "\"
+    "\"\"\"\""
+    "
+    """
+    "abc""abc2"
     scan("%d", &y); /* segundo teste */
     /*
     print("\nFeirense "); 

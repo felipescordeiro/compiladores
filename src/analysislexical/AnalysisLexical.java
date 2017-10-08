@@ -85,7 +85,7 @@ public class AnalysisLexical {
 						looking = false;
 					} else line = "";
 				}
-				if(!looking && line.contains("\"") && line.lastIndexOf("\"") <= line.indexOf("\"")) line = "/*\"*/";
+				if(!looking && line.contains("\"") && line.lastIndexOf("\"") == line.indexOf("\"")) line = "/*\"*/";
 				lineArchive.add(numberLine, line);
 			  	line = file.readLine(); // le da segunda linha ate a ultima linha
 			  	numberLine++;
@@ -103,7 +103,7 @@ public class AnalysisLexical {
 	 */
 	public void printLines(){
 		for(int i = 0; i < lineArchive.size(); i++){
-			System.out.println((i+1) + " = " + lineArchive.get(i));
+			System.out.println(i + " = " + lineArchive.get(i));
 		}
 	}
 	
@@ -117,6 +117,11 @@ public class AnalysisLexical {
 						System.out.println(linha + " Erro de comentario malformado");
 						words.add("<ERRO, >" + " Comentario de blocos malformado " + "Linha: " + linha);
 						break;
+					}
+					if (a[i].contains("/*\"*/")) {
+						System.out.println(linha + " Erro de cadeia de caracteres malformado");
+						words.add("<ERRO, > Cadeia de Caracteres malformado Linha: " + linha);
+						a[i] = "";
 					}
 					if (a[i].contains("\"")) {						
 						String r = "\\x22([\\x20-\\x21\\x23-\\x7E]|\\\")*\\x22";
@@ -192,11 +197,10 @@ public class AnalysisLexical {
 					} else if (regex.isOpRelacionais(sequence)) {
 						words = howEstructure(words, linha, sequence);
 					} else if (regex.isIdentificador(sequence)) {
-						if(regex.hasErrorId(sequence.substring(0)) || regex.isOpAritmeticos(sequence.substring(0)) 
-								|| regex.isOpLogicos(sequence.substring(0)) || regex.isOpRelacionais(sequence.substring(0))) {
+						if(regex.hasErrorId(sequence) || !regex.isLetra(sequence.substring(0, 1))) {
 								System.out.println(linha + " Identificador Malformado: " + sequence);
 								words.add("<ERRO, >" + "Identificador Malformado: " + sequence + " Linha: " + linha);
-							} else {
+							}else {
 								System.out.println(linha + " Identificador: " + sequence);
 								words.add("<identificador, >" + " Identificador: " + sequence + " Linha: " + linha);
 							}

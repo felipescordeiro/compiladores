@@ -21,7 +21,7 @@ public class Regex {
 	private final Pattern opRelacionais = Pattern.compile("(!=|=|<|<=|>|>=)");
 	private final Pattern opLogicos = Pattern.compile("!|\\|{2}|&&");
 	private final Pattern delimitador = Pattern.compile("(;|,|\\(|\\)|\\[|\\]|\\{|\\})");
-	private final Pattern identificadorError = Pattern.compile("[\\x21-\\x2F\\x3A-\\x40\\x5B-\\x60\\x7B-\\x7E]");
+	private final Pattern identificadorError = Pattern.compile("\\W");
 
 	private Matcher matcher;
 	
@@ -55,6 +55,7 @@ public class Regex {
 		this.matcher = this.palavrasReservadas.matcher(sequence);
 		return this.matcher.find();
 	}
+	
 	
 	/**
 	 * Identify if sequence has 'Digito'

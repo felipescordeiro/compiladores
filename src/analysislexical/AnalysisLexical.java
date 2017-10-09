@@ -467,7 +467,7 @@ public class AnalysisLexical {
 				}							
 			}			
 		}
-		//writeLexical(words);
+		writeLexical(words);
 		generateSheet(words);
 		printLines();
 		words.clear();
@@ -477,7 +477,7 @@ public class AnalysisLexical {
 	public void writeLexical(ArrayList<String> words){
 		try {
 			ArrayList<ArrayList<String>> output = new ArrayList<ArrayList<String>>();
-			  FileOutputStream fos   = new FileOutputStream(pathInput+ nameArchive +"_Compilado.txt");
+			  FileOutputStream fos   = new FileOutputStream(pathStorage+ nameArchive +"_Compilado.txt");
 		      OutputStreamWriter osw = new OutputStreamWriter(fos);
 		      BufferedWriter bw      = new BufferedWriter(osw);   
 		     boolean isSuccessful = true;  
@@ -485,14 +485,10 @@ public class AnalysisLexical {
             for(int i = 0; i < words.size(); i++){
           	  //System.out.println(bestChromossome.get(i));
               String tokens[] = words.get(i).split("Linha:");
-          	  bw.write(tokens[0] + "\t " + tokens[1] + "\n");
-          	  if(words.get(i).contains("delimitador")){
-        		
-        	  }else if(words.get(i).contains("reservada")){
-        		  
-        	  }else if(words.get(i).contains("delimitador")){
-        		  isSuccessful = false;
-        	  }
+              tokens[1] = tokens[1].replaceAll(" ", ""); 
+              int line = Integer.parseInt(tokens[1]);
+              line += 1;
+          	  bw.write(tokens[0] + "\t " + line  + "\n");
           	  if(words.get(i).contains("ERRO")){
           		  isSuccessful = false;
           	  }
@@ -514,8 +510,9 @@ public class AnalysisLexical {
 		try {
 			HSSFWorkbook workbook = new HSSFWorkbook();
 			HSSFSheet worksheet = workbook.createSheet("matching_measures");
-			int i = 2;
-			Row row = worksheet.createRow(1);
+			int i = 0;
+			boolean isSuccessful = true;  
+			Row row = worksheet.createRow(i);
 			Cell patternCell = row.createCell(2);
 			Cell tokenCell = row.createCell(4);
 			Cell lineCell = row.createCell(6);
@@ -523,7 +520,7 @@ public class AnalysisLexical {
 			tokenCell.setCellValue("Token");
 			lineCell.setCellValue("Linha");
 			while(i < words.size()) {
-				row = worksheet.createRow(i);
+				row = worksheet.createRow(i + 1);
 				patternCell = row.createCell(2);
 				tokenCell = row.createCell(4);
 				lineCell = row.createCell(6);
@@ -532,9 +529,23 @@ public class AnalysisLexical {
 				patternCell.setCellValue(pattern + "->");
 				String token = words.get(i).replace(pattern+"->", "");
 				tokenCell.setCellValue(token.split("Linha:")[0]);
-				lineCell.setCellValue(token.split("Linha:")[1]);
+				token = token.split("Linha:")[1];
+				lineCell.setCellValue(Integer.parseInt(token.replaceAll(" ", "")) + 1);
+				if(words.get(i).contains("ERRO")){
+	          		  isSuccessful = false;
+	          	  }
 				i++;
+				
+				
 			}
+			
+			if(isSuccessful){
+				String message = "Sucesso - Compilou sem erros!";
+				row = worksheet.createRow(i+ 2);
+				patternCell = row.createCell(2);
+				patternCell.setCellValue(message);
+				System.out.println(message);
+		    }
 			
 			FileOutputStream output = new FileOutputStream(new File(pathStorage + File.separator + nameArchive+".xls"));
 			workbook.write(output);

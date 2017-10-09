@@ -30,39 +30,29 @@ public class AnalysisLexical {
 	ArrayList<String> lineArchive;
 	HashMap<Integer, HashMap<Integer, ArrayList<String>>> matrix;//hash para cada linha
 	HashMap<Integer, ArrayList<String>> words;
-	private Properties configFile;
+	
 	
 	String pathInput;
 	String pathStorage;
 	String nameArchive;
 	Regex regex;
 	
-	public AnalysisLexical() {
+	public AnalysisLexical(String pathInput, String pathStorage) {
 		lineArchive = new ArrayList<String>();
 		matrix = new HashMap<Integer, HashMap<Integer,ArrayList<String>>>();
 		
 		regex = new Regex();
 		
-		configFile = new Properties();
-		try {//Leitura das configuracoes
-			configFile.load(new FileInputStream("resources/LexicalConfigFile.properties"));
-			pathInput = configFile.getProperty("PATHINPUT");
-			pathStorage = configFile.getProperty("PATHSTORAGE");
-			nameArchive = configFile.getProperty("NAMEARCHIVE");
-			
-			//Leitura do arquivo fonte
-			readFiles();
-		} catch(FileNotFoundException e) {
-			e.printStackTrace();
-		} catch(IOException e) {
-			e.printStackTrace();
-		}
+		
+		this.pathInput = pathInput;
+		this.pathStorage = pathStorage;
 	}
 	
 	/**
 	 * Leitura do arquivo fonte
+	 * @param nameArchive 
 	 */
-	private void readFiles(){
+	private void readFiles(String nameArchive){
 		int numberLine = 0;
 		try {
 			FileReader fileRead = new FileReader(pathInput + nameArchive);
@@ -118,7 +108,11 @@ public class AnalysisLexical {
 		}
 	}
 	
-	public void parser(){
+	public void parser(String nameArchive){
+		this.nameArchive = nameArchive;
+		
+		//Leitura do arquivo fonte
+		readFiles(nameArchive);
 		ArrayList<String> words = new ArrayList<String>();
 		boolean notFind = true;
 		int count;
@@ -475,6 +469,8 @@ public class AnalysisLexical {
 		}
 		//writeLexical(words);
 		generateSheet(words);
+		words.clear();
+		lineArchive.clear();
 	}
 
 	public void writeLexical(ArrayList<String> words){
@@ -543,7 +539,6 @@ public class AnalysisLexical {
 			workbook.write(output);
 			output.close();
 			workbook.close();
-			System.out.println("Intrinsic cluster evaluation spreadsheet written successfully!");
 		} catch(Exception e) {
 			e.printStackTrace();
 		}

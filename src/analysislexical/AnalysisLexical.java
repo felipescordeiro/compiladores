@@ -469,6 +469,7 @@ public class AnalysisLexical {
 		}
 		//writeLexical(words);
 		generateSheet(words);
+		printLines();
 		words.clear();
 		lineArchive.clear();
 	}

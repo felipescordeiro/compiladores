@@ -30,7 +30,6 @@ public class Start {
 			archive = directory.listFiles();
 			for(int i = 0; i < archive.length; i++){
 				startCompiler.parser(archive[i].getName());
-				startCompiler.printLines();
 			}
 		} catch(FileNotFoundException e) {
 			e.printStackTrace();

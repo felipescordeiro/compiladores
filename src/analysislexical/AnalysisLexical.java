@@ -149,9 +149,15 @@ public class AnalysisLexical {
 						cadeia = sequence.split("\"");
 						for(int j = 0; j < cadeia.length; j++) { //o split vai quebrar a string criando strings vazias nas posicoes das aspas
 							if(j%2!=0){
-								cadeia[j] = "\"" + cadeia[j] + "\""; //Readicionando as aspas									
-								words.add("<-  Caracteres   -> Cadeia de Caracteres: " + cadeia[j] + " "
-										+ "                Linha: " + linha);
+								cadeia[j] = "\"" + cadeia[j] + "\""; //Readicionando as aspas
+								if(regex.isNotSimbolo(cadeia[j])){
+									words.add("<-     ERRO      -> Cadeia de Caracter mal formado "
+											+ "                Linha: " + linha);
+								}
+								else {
+									words.add("<-  Caracteres   -> Cadeia de Caracteres: " + cadeia[j] + " "
+											+ "                Linha: " + linha);
+								}								
 								System.out.println(linha + " Cadeia de Caracteres: " + cadeia[j]);
 							}							
 						}
@@ -468,7 +474,7 @@ public class AnalysisLexical {
 			}			
 		}
 		writeLexical(words);
-		generateSheet(words);
+		//generateSheet(words);
 		printLines();
 		words.clear();
 		lineArchive.clear();

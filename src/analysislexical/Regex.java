@@ -24,9 +24,19 @@ public class Regex {
 	private final Pattern identificadorError = Pattern.compile("\\W");
 	private final Pattern quotes = Pattern.compile("\"");
 	private final Pattern cadeia = Pattern.compile("\".*\"");
+	private final Pattern notSimbolo = Pattern.compile("[\\x00-\\x1F\\x7F-\\xFF]");
 	private Matcher matcher;
 	
 	public Regex () {}
+	
+	public boolean isNotSimbolo(String sequence) {
+		try{
+			this.matcher = this.notSimbolo.matcher(sequence);
+			return this.matcher.find();
+		}catch (Exception e) {
+			return false;
+		}
+	}
 	
 	public String groupIdentificador(String sequence) {
 		try{

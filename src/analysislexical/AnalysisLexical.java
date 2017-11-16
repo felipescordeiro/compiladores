@@ -64,7 +64,11 @@ public class AnalysisLexical {
 			while (line != null) {
 				if (line.contains("//")) { //verificando comentario de linha
 					//adiciona no array a linha contendo da primeira posicao ate a posicao inicial do //
-					line = line.substring(0, line.indexOf("//"));
+					if(!line.contains("\"w*\\w*\"")){
+						
+					}else{
+						line = line.substring(0, line.indexOf("//"));
+					}
 				}
 				if (line.contains("/*")){
 					lineError = numberLine;

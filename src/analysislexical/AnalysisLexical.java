@@ -221,7 +221,7 @@ public class AnalysisLexical {
 					System.out.println(linha + " Delimitador: [");
 					for(int i = 0; i < count; i++) words.add("<-  Delimitador  ->" + " Delimitador: [ " + " "
 							+ "                               Linha: " + linha);
-					sequence = sequence.replaceAll("[", " ");
+					sequence = sequence.replaceAll("\\[", " ");
 				} if(sequence.indexOf("]") >= 0) {
 					count = sequence.length()-sequence.replace("]", "").length();
 					System.out.println(linha + " Delimitador: ]");
@@ -474,7 +474,7 @@ public class AnalysisLexical {
 			}			
 		}
 		writeLexical(words);
-		//generateSheet(words);
+		generateSheet(words);
 		printLines();
 		words.clear();
 		lineArchive.clear();
@@ -553,7 +553,7 @@ public class AnalysisLexical {
 				System.out.println(message);
 		    }
 			
-			FileOutputStream output = new FileOutputStream(new File(pathStorage + File.separator + nameArchive+".xls"));
+			FileOutputStream output = new FileOutputStream(new File(pathStorage + File.separator + nameArchive+"_Compilado.xls"));
 			workbook.write(output);
 			output.close();
 			workbook.close();

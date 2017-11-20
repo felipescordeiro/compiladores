@@ -25,7 +25,7 @@ public class Start {
 		
 			AnalysisLexical startCompiler = new AnalysisLexical(pathInput, pathStorage);		
 			File archive[];
-			//Caminho do diretório onde os arquivos serão lidos
+			//Caminho do diretorio onde os arquivos serao lidos
 			File directory = new File (pathInput);
 			archive = directory.listFiles();
 			for(int i = 0; i < archive.length; i++){

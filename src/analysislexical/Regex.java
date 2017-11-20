@@ -105,7 +105,7 @@ public class Regex {
 	 */
 	public boolean isDigito(String sequence) {
 		this.matcher = this.digito.matcher(sequence);
-		return this.matcher.find();
+		return this.matcher.matches();
 	}
 	
 	/**

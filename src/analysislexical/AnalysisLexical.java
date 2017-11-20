@@ -339,17 +339,18 @@ public class AnalysisLexical {
 							+ "                          Linha: " + linha);
 					sequence = sequence.replaceAll("&", " ");
 				}
-				if(sequence.indexOf("-") >= 0){					
+				if(sequence.indexOf("-") >= 0){			
 					String[] r;
 					r = sequence.split("-");
 					for(int i = 0; i < r.length; i++){
+						r[i] = r[i].trim();
 						if(regex.isPalavrasReservadas(r[i])){
 							String[] aux = r[i].split(" ");
 							for(int j = 0; j < aux.length; j++){
 								if(aux[j].isEmpty()) continue;
 								else if(regex.isPalavrasReservadas(aux[j])){
 									System.out.println(linha + " Palavra Reservada: " + aux[j]);
-									words.add("<- Pal Reservada ->" + " Palavra Reservada: " +  aux[j] +" "
+									words.add("<- Pal Reservada ->" + " Palavra Reservada: " +  aux[j] + " "
 											+ "                       Linha: " + linha);
 									sequence = sequence.replaceFirst(aux[j], "");
 									r[i] = r[i].replaceFirst(aux[j], "");
@@ -367,33 +368,41 @@ public class AnalysisLexical {
 									r[i] = r[i].replaceFirst(aux[j], "");
 								} else continue;
 							}
-						}
-						if(!r[i].isEmpty()) {
-							r[i] = "-" + r[i];
-							int countDots = r[i].length()-r[i].replace(".", "").length();
-							if(countDots>1){
+						}if(!r[i].isEmpty()) {
+							r[i] = r[i].replace(" ", ""); //removendo o espaco q pode existir entre o - e o primeiro digito
+							sequence = sequence.replace(" ", ""); //removendo o espaco q pode existir entre o - e o primeiro digito
+							if(i != 0) r[i] = "-" + r[i];
+							if(!regex.isDigito(r[i])) {
 								words.add("<-     ERRO      -> Numero mal formado: " + r[i] + " "
 										+ "                  Linha: " + linha);
 								System.out.println(linha + " ERRO numero mal formado " + sequence);
-								sequence = sequence.replace(r[i].substring(1), "");
-							}
-							else if(countDots == 1) {
-								if(!"".equals(r[i].charAt(r[i].indexOf(".")+1))){
-									words.add("<-    Numero     -> Numero " + r[i] + " "
-											+ "                                  Linha: " + linha);
-									sequence = sequence.replaceFirst("-?[\\x09|\\x0A|\\x0D|\\x20]*?\\b[0-9]+(\\x2E[0-9]+)?\\b", " ");
-									System.out.println(linha + " Numero: " + sequence);
-								}else {
-									words.add("<-     ERRO      -> Numero mal formado "
+								sequence = sequence.replace(r[i], " ");								
+							} else {								
+								int countDots = r[i].length()-r[i].replace(".", "").length();
+								if(countDots>1){
+									words.add("<-     ERRO      -> Numero mal formado: " + r[i] + " "
 											+ "                  Linha: " + linha);
+									System.out.println(linha + " ERRO numero mal formado " + sequence);
 									sequence = sequence.replace(r[i].substring(1), "");
-									System.out.println(linha + " ERRO Numero mal formado " + sequence);
 								}
-							} else if(regex.isNumero(r[i])){
-								words.add("<-    Numero     -> Numero: " + r[i] + " "
-										+ "                                   Linha: " + linha);
-								sequence = sequence.replaceFirst("-?[\\x09|\\x0A|\\x0D|\\x20]*?\\b[0-9]+\\b", " ");
-								System.out.println(linha + " Numero: " + r[i]);
+								else if(countDots == 1) {
+									if(!"".equals(r[i].charAt(r[i].indexOf(".")+1))){
+										words.add("<-    Numero     -> Numero " + r[i] + " "
+												+ "                                  Linha: " + linha);
+										sequence = sequence.replaceFirst("-?[\\x09|\\x0A|\\x0D|\\x20]*?\\b[0-9]+(\\x2E[0-9]+)?\\b", " ");
+										System.out.println(linha + " Numero: " + sequence);
+									}else {
+										words.add("<-     ERRO      -> Numero mal formado "
+												+ "                  Linha: " + linha);
+										sequence = sequence.replace(r[i].substring(1), "");
+										System.out.println(linha + " ERRO Numero mal formado " + sequence);
+									}
+								} else if(regex.isNumero(r[i])){
+									words.add("<-    Numero     -> Numero: " + r[i] + " "
+											+ "                                   Linha: " + linha);
+									sequence = sequence.replaceFirst("-?[\\x09|\\x0A|\\x0D|\\x20]*?\\b[0-9]+\\b", " ");
+									System.out.println(linha + " Numero: " + r[i]);
+								}
 							}
 						}
 					}
@@ -430,12 +439,18 @@ public class AnalysisLexical {
 								sequence = sequence.replace(r[i].substring(1), "");
 							}
 							else if(countDots == 1) {
-								if(r[i].indexOf(".")+1 < r[i].length()){
+								 if(r[i].indexOf(".") == 0 || regex.isNumero(r[r[i].indexOf(".")-1])){
+									 words.add("<-     ERRO      -> Numero mal formado "
+												+ "                  Linha: " + linha);
+									 sequence = sequence.replace(r[i], " ");
+									 System.out.println(linha + " ERRO Numero mal formado");
+								 }
+								 else if(r[i].indexOf(".")+1 < r[i].length()){
 									words.add("<-    Numero     -> Numero: " + r[i] + " "
 											+ "                                   Linha: " + linha);
 									sequence = sequence.replaceFirst("-?[\\x09|\\x0A|\\x0D|\\x20]*?\\b[0-9]+(\\x2E[0-9]+)?\\b", " ");
 									System.out.println(linha + " Numero: " + r[i]);
-								}else {
+								} else {
 									words.add("<-     ERRO      -> Numero mal formado "
 											+ "                  Linha: " + linha);
 									sequence = sequence.replace(r[i], " ");

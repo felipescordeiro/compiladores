@@ -120,8 +120,11 @@ public class AnalysisLexical {
 		ArrayList<String> words = new ArrayList<String>();
 		boolean notFind = true;
 		int count;
+		int initPos = 0;
+		int lastPos = 0;
 		for(int linha = 0; linha < lineArchive.size(); linha++){
 			if(!"".equals(lineArchive.get(linha).trim())) {
+				initPos = words.size();
 				String sequence = lineArchive.get(linha);
 				if (sequence.contains("/**/")){
 					System.out.println(linha + " Erro de comentario mal formado");
@@ -489,14 +492,55 @@ public class AnalysisLexical {
 							sequence = sequence.replaceFirst(r[i], "");
 						}
 					}
-				}							
-			}			
+				}
+				lastPos = words.size();
+				order(lineArchive.get(linha), initPos, lastPos, words);
+			}	
 		}
 		writeLexical(words);
 		generateSheet(words);
 		printLines();
 		words.clear();
 		lineArchive.clear();
+	}
+
+	private void order(String sequenceLine, int initPos, int lastPos,
+			ArrayList<String> words) {
+		int pos = 0;
+		String word = "";
+		//System.out.println("init " + initPos + " last " + lastPos);
+		String[] aux = new String[100];
+		for(int i = initPos; i < lastPos; i++){
+			word = words.get(i).split(": ")[1];
+			word = word.split("   ")[0];
+			word = word.replace(" ", "");
+			pos = sequenceLine.indexOf(word);
+			System.out.println(pos + " palavra " + word);
+			if(pos == -1){
+				
+			}else{
+				aux[pos] = words.get(i);
+			}
+			//System.out.println(pos + " substring " + word + " linha " + sequenceLine);
+		}
+		String aux2[] = new String[lastPos - initPos];
+		int index = 0;
+		for(int i = 0; i< aux.length; i++){
+			if(aux[i] != null){
+				aux2[index] = aux[i];
+				index++;
+				
+			}
+		}
+		index = 0;
+		for(int i = initPos; i < lastPos; i++){
+			System.out.println(i + " string " + words.get(i));
+			words.set(i, aux2[index]);
+			index++;
+			//System.out.println(i + " string " + words.get(i));
+		}
+		
+		
 	}
 
 	public void writeLexical(ArrayList<String> words){
@@ -508,7 +552,7 @@ public class AnalysisLexical {
 		     boolean isSuccessful = true;  
 		     bw.write("    Padrao      -             Token                      -            Linha\n");
             for(int i = 0; i < words.size(); i++){
-          	  //System.out.println(bestChromossome.get(i));
+          	  //System.out.println(words.get(i));
               String tokens[] = words.get(i).split("Linha:");
               tokens[1] = tokens[1].replaceAll(" ", ""); 
               int line = Integer.parseInt(tokens[1]);

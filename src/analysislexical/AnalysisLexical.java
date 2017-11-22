@@ -553,14 +553,16 @@ public class AnalysisLexical {
 		     bw.write("    Padrao      -             Token                      -            Linha\n");
             for(int i = 0; i < words.size(); i++){
           	  //System.out.println(words.get(i));
-              String tokens[] = words.get(i).split("Linha:");
-              tokens[1] = tokens[1].replaceAll(" ", ""); 
-              int line = Integer.parseInt(tokens[1]);
-              line += 1;
-          	  bw.write(tokens[0] + "\t " + line  + "\n");
-          	  if(words.get(i).contains("ERRO")){
-          		  isSuccessful = false;
-          	  }
+            	if(words.get(i) != null){
+	              String tokens[] = words.get(i).split("Linha:");
+	              tokens[1] = tokens[1].replaceAll(" ", ""); 
+	              int line = Integer.parseInt(tokens[1]);
+	              line += 1;
+	          	  bw.write(tokens[0] + "\t " + line  + "\n");
+	          	  if(words.get(i).contains("ERRO")){
+	          		  isSuccessful = false;
+	          	  }
+            	}
             }
             if(isSuccessful){
 		      bw.write("\n\nSucesso - Compilou sem erros!");	 
@@ -593,6 +595,7 @@ public class AnalysisLexical {
 				patternCell = row.createCell(2);
 				tokenCell = row.createCell(4);
 				lineCell = row.createCell(6);
+				if(words.get(i) != null){
 				String pattern = words.get(i).split("->")[0];
 				
 				patternCell.setCellValue(pattern + "->");
@@ -603,6 +606,7 @@ public class AnalysisLexical {
 				if(words.get(i).contains("ERRO")){
 	          		  isSuccessful = false;
 	          	  }
+				}
 				i++;
 				
 				

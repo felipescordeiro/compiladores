@@ -6,6 +6,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Properties;
 
+import analysissyntax.Syntax;
+
 public class Start {
 
 	
@@ -30,6 +32,11 @@ public class Start {
 			archive = directory.listFiles();
 			for(int i = 0; i < archive.length; i++){
 				startCompiler.parser(archive[i].getName());
+			}
+			Syntax syntax = new Syntax(pathInput, pathStorage);
+			for(int i = 0; i < archive.length; i++){
+				syntax.parser(archive[i].getName());
+				//syntax.printLine();
 			}
 		} catch(FileNotFoundException e) {
 			e.printStackTrace();

@@ -1,0 +1,85 @@
+    Padrao      -             Token                      -            Linha
+<-     ERRO      -> Identificador mal formado: #include                   	 1
+<- Op Relacional -> Operador Relacional: <                            	 1
+<-     ERRO      -> Identificador mal formado: stdio.h                   	 1
+<- Op Relacional -> Operador Relacional: >                            	 1
+<- Pal Reservada -> Palavra Reservada: int                        	 3
+<- Identificador -> Identificador: main                                     	 3
+<-  Delimitador  -> Delimitador: (                                 	 3
+<-  Delimitador  -> Delimitador: )                                 	 3
+<-  Delimitador  -> Delimitador: {                                 	 3
+<- Pal Reservada -> Palavra Reservada: int                        	 5
+<- Identificador -> Identificador: x                                     	 5
+<-  Delimitador  -> Delimitador: ,                                 	 5
+<- Identificador -> Identificador: y                                     	 5
+<- Identificador -> Identificador: w                                     	 5
+<- Identificador -> Identificador: z                                     	 5
+<-  Delimitador  -> Delimitador: ;                                 	 5
+<- Identificador -> Identificador: x                                     	 6
+<- Op Relacional -> Operador Relacional: =                            	 6
+<-     ERRO      -> Numero mal formado: 12                   	 6
+<-  Delimitador  -> Delimitador: ;                                 	 6
+<- Identificador -> Identificador: x                                     	 7
+<- Op Relacional -> Operador Relacional: =                            	 7
+<-    Numero     -> Numero: 12                                    	 7
+<-    Numero     -> Numero: 2                                    	 7
+<- Op Aritmetico -> Operador Aritmeticos: +                            	 7
+<- Identificador -> Identificador: x                                     	 8
+<- Op Relacional -> Operador Relacional: =                            	 8
+<-    Numero     -> Numero: 3                                    	 8
+<- Op Aritmetico -> Operador Aritmetico: -                         	 8
+<-     ERRO      -> Numero mal formado: -4                   	 8
+<- Identificador -> Identificador: a                                     	 9
+<- Op Relacional -> Operador Relacional: =                            	 9
+<-     ERRO      -> Numero mal formado: -3#                   	 9
+<-  Delimitador  -> Delimitador: ;                                 	 9
+<-  Caracteres   -> Cadeia de Caracteres: ""                 	 9
+<- Pal Reservada -> Palavra Reservada: print                        	 12
+<-  Delimitador  -> Delimitador: (                                 	 12
+<- Identificador -> Identificador: x                                     	 12
+<-  Delimitador  -> Delimitador: ,                                 	 12
+<- Identificador -> Identificador: y                                     	 12
+<-  Delimitador  -> Delimitador: )                                 	 12
+<-  Delimitador  -> Delimitador: ;                                 	 12
+<- Pal Reservada -> Palavra Reservada: scan                        	 13
+<-  Delimitador  -> Delimitador: (                                 	 13
+<-  Caracteres   -> Cadeia de Caracteres: "%d"                             	 13
+<-  Delimitador  -> Delimitador: ,                                 	 13
+<-     ERRO      -> Identificador mal formado: &x                   	 13
+<-  Delimitador  -> Delimitador: )                                 	 13
+<-  Delimitador  -> Delimitador: ;                                 	 13
+<- Op Aritmetico -> Operador Aritmeticos: /                            	 14
+<- Pal Reservada -> Palavra Reservada: print                        	 14
+<-  Delimitador  -> Delimitador: (                                 	 14
+<-  Delimitador  -> Delimitador: )                                 	 14
+<-  Delimitador  -> Delimitador: ;                                 	 14
+<-  Caracteres   -> Cadeia de Caracteres: "\"\"\"\""                             	 18
+<-  Caracteres   -> Cadeia de Caracteres: "abc"                 	 21
+<-  Caracteres   -> Cadeia de Caracteres: "abc2"                 	 21
+<- Pal Reservada -> Palavra Reservada: scan                        	 22
+<-  Delimitador  -> Delimitador: (                                 	 22
+<-  Caracteres   -> Cadeia de Caracteres: "%d"                             	 22
+<-  Delimitador  -> Delimitador: ,                                 	 22
+<-     ERRO      -> Identificador mal formado: &y                   	 22
+<-  Delimitador  -> Delimitador: )                                 	 22
+<-  Delimitador  -> Delimitador: ;                                 	 22
+<- Pal Reservada -> Palavra Reservada: print                        	 26
+<-  Delimitador  -> Delimitador: (                                 	 26
+<- Identificador -> Identificador: z                                     	 26
+<-  Delimitador  -> Delimitador: ,                                 	 26
+<-  Delimitador  -> Delimitador: )                                 	 26
+<-  Delimitador  -> Delimitador: ;                                 	 26
+<- Pal Reservada -> Palavra Reservada: scan                        	 27
+<-  Delimitador  -> Delimitador: (                                 	 27
+<-  Caracteres   -> Cadeia de Caracteres: "%d"                             	 27
+<-  Delimitador  -> Delimitador: ,                                 	 27
+<-     ERRO      -> Identificador mal formado: &z                   	 27
+<-  Delimitador  -> Delimitador: )                                 	 27
+<-  Delimitador  -> Delimitador: ;                                 	 27
+<- Pal Reservada -> Palavra Reservada: scan                        	 29
+<-  Delimitador  -> Delimitador: ;                                 	 29
+<- Identificador -> Identificador: get                                     	 30
+<-  Delimitador  -> Delimitador: (                                 	 30
+<-  Delimitador  -> Delimitador: )                                 	 30
+<-  Delimitador  -> Delimitador: ;                                 	 30
+<-     ERRO      -> Comentario de blocos mal formado                 	 31

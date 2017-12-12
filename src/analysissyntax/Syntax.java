@@ -13,12 +13,15 @@ public class Syntax {
 	HashMap<String, ArrayList<String>> table;
 	ArrayList<String> lineArchive;
 	ArrayList<String> words;
+	ArrayList<String> tokenWords;
 	int lastNumber = 0;
 	HashMap<Integer, ArrayList<String>> lineMap;
+	HashMap<Integer, ArrayList<String>> tokenMap;
 	String pathInput;
 	String pathStorage;
 	public Syntax(String pathInput, String pathStorage){
 		lineMap = new HashMap<Integer, ArrayList<String>>();
+		tokenMap = new HashMap<Integer, ArrayList<String>>();
 		lineArchive = new ArrayList<String>();
 		
 		this.pathInput = pathInput;
@@ -60,6 +63,7 @@ public class Syntax {
 			FileReader fileRead = new FileReader(pathStorage + nameArchive + "_Compilado.txt");
 		    BufferedReader file = new BufferedReader(fileRead);
 		    String line;
+		    String token;
 		    String[] lineSplits;
 		    line = file.readLine();
 			while (line != null) {
@@ -73,16 +77,24 @@ public class Syntax {
 					numberLine = numberLine.replaceAll("	", "");
 					numberLine = numberLine.replaceAll(" ", "");
 					int number = Integer.parseInt(numberLine);
+					
+					token = line.split(":")[0];
+					
 					if(lineMap.containsKey(number)){
 						lineMap.get(number).add(line);
+						tokenMap.get(number).add(token);
 					}else{
-						System.out.println("  aa" + number);
+						//System.out.println("  aa" + number);
 						words = new ArrayList<String>();
 						words.add(line);
 						lineMap.put(number, words);
 						lastNumber = number;
+						
+						tokenWords = new ArrayList<String>();
+						tokenWords.add(token);
+						tokenMap.put(number, tokenWords);
 					}
-					System.out.println("SINTATICO " + line + " linha " + number );
+					//System.out.println("SINTATICO " + line + " linha " + number );
 					lineMap.get(lineMap.size() -1 + "");
 				}
 				line = file.readLine(); // le da segunda linha ate a ultima linha
@@ -93,7 +105,7 @@ public class Syntax {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		printLine();
+		//printLine();
 	}
 	
 	
@@ -104,6 +116,7 @@ public class Syntax {
 			if(lineMap.containsKey(i)){
 				for(int j = 0; j < lineMap.get(i).size(); j++){
 					System.out.println("linha: " + i +"  dado linha " + lineMap.get(i).get(j));
+					System.out.println("linha: " + i  + tokenMap.get(i).get(j));
 				}
 			}
 		}

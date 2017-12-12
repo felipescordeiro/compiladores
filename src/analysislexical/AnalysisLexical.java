@@ -108,7 +108,7 @@ public class AnalysisLexical {
 	 */
 	public void printLines(){
 		for(int i = 0; i < lineArchive.size(); i++){
-			System.out.println(i + " = " + lineArchive.get(i));
+			//System.out.println(i + " = " + lineArchive.get(i));
 		}
 	}
 	
@@ -127,13 +127,13 @@ public class AnalysisLexical {
 				initPos = words.size();
 				String sequence = lineArchive.get(linha);
 				if (sequence.contains("/**/")){
-					System.out.println(linha + " Erro de comentario mal formado");
+					//System.out.println(linha + " Erro de comentario mal formado");
 					words.add("<-     ERRO      -> Comentario de blocos mal formado "
 							+ "                Linha: " + linha);
 					break;
 				}
 				if (sequence.contains("/*\"*/")) {
-					System.out.println(linha + " Erro de cadeia de caracteres mal formado" + ": " + sequence);
+					//System.out.println(linha + " Erro de cadeia de caracteres mal formado" + ": " + sequence);
 					words.add("<-     ERRO      -> Cadeia de Caracteres mal formado "
 							+ "                Linha: " + linha);
 					sequence = "";
@@ -165,7 +165,7 @@ public class AnalysisLexical {
 									words.add("<-  Caracteres   -> Cadeia de Caracteres: " + cadeia[j] + " "
 											+ "                Linha: " + linha);
 								}								
-								System.out.println(linha + " Cadeia de Caracteres: " + cadeia[j]);
+								//System.out.println(linha + " Cadeia de Caracteres: " + cadeia[j]);
 							}							
 						}
 						notFind = false;
@@ -179,12 +179,12 @@ public class AnalysisLexical {
 							sequence = sequence.replaceAll(r, "");
 						}else if (m.matches(r)){
 							if (quotes) {
-								System.out.println(linha + " Cadeia de Caracteres: " + aux);								
+								//System.out.println(linha + " Cadeia de Caracteres: " + aux);								
 								words.add("<-  Caracteres   -> Cadeia de Caracteres: " + aux + " "
 										+ "                            Linha: " + linha);
 							}
 							else {
-								System.out.println(linha + " Cadeia de Caracteres: " + m);
+								//System.out.println(linha + " Cadeia de Caracteres: " + m);
 								words.add("<-  Caracteres   -> Cadeia de Caracteres: " + m + " "
 										+ "                            Linha: " + linha);
 							}
@@ -194,56 +194,56 @@ public class AnalysisLexical {
 							sequence = sequence.replaceAll(r, "");
 						}
 					} else if(sequence.lastIndexOf("\"") <= sequence.indexOf("\"") && notFind) {
-						System.out.println(linha + " Erro de cadeia de caracteres mal formado" + ": " + sequence);
+						//System.out.println(linha + " Erro de cadeia de caracteres mal formado" + ": " + sequence);
 						words.add("<-     ERRO      -> Cadeia de Caracteres mal formado: nao fechado, Linha: " + linha);
 						sequence = sequence.replaceAll(r, "");
 					}
 				}
 				if(sequence.indexOf(";") >= 0) {
 					count = sequence.length()-sequence.replace(";", "").length();
-					System.out.println(linha + " Delimitador: ;");
+					//System.out.println(linha + " Delimitador: ;");
 					for(int i = 0; i < count; i++) words.add("<-  Delimitador  ->" + " Delimitador: ; " + " "
 							+ "                               Linha: " + linha);						
 					sequence = sequence.replaceAll(";", " ");
 				} if(sequence.indexOf(",") >= 0) {
 					count = sequence.length()-sequence.replace(",", "").length();
-					System.out.println(linha + " Delimitador: ,");
+					//System.out.println(linha + " Delimitador: ,");
 					for(int i = 0; i < count; i++) words.add("<-  Delimitador  ->" + " Delimitador: , " + " "
 							+ "                               Linha: " + linha);
 					sequence = sequence.replaceAll(",", " ");
 				} if(sequence.indexOf("(") >= 0) {
 					count = sequence.length()-sequence.replace("(", "").length();
-					System.out.println(linha + " Delimitador: (");
+					//System.out.println(linha + " Delimitador: (");
 					for(int i = 0; i < count; i++) words.add("<-  Delimitador  ->" + " Delimitador: ( " + " "
 							+ "                               Linha: " + linha);
 					sequence = sequence.replaceAll("\\(", " ");
 				} if(sequence.indexOf(")") >= 0) {
 					count = sequence.length()-sequence.replace(")", "").length();
-					System.out.println(linha + " Delimitador: )");
+					//System.out.println(linha + " Delimitador: )");
 					for(int i = 0; i < count; i++) words.add("<-  Delimitador  ->" + " Delimitador: ) " + " "
 							+ "                               Linha: " + linha);
 					sequence = sequence.replaceAll("\\)", " ");
 				} if(sequence.indexOf("[") >= 0) {
 					count = sequence.length()-sequence.replace("[", "").length();
-					System.out.println(linha + " Delimitador: [");
+					//System.out.println(linha + " Delimitador: [");
 					for(int i = 0; i < count; i++) words.add("<-  Delimitador  ->" + " Delimitador: [ " + " "
 							+ "                               Linha: " + linha);
 					sequence = sequence.replaceAll("\\[", " ");
 				} if(sequence.indexOf("]") >= 0) {
 					count = sequence.length()-sequence.replace("]", "").length();
-					System.out.println(linha + " Delimitador: ]");
+					//System.out.println(linha + " Delimitador: ]");
 					for(int i = 0; i < count; i++) words.add("<-  Delimitador  ->" + " Delimitador: ] " + " "
 							+ "                               Linha: " + linha);
 					sequence = sequence.replaceAll("]", " ");
 				} if(sequence.indexOf("{") >= 0) {
 					count = sequence.length()-sequence.replace("{", "").length();
-					System.out.println(linha + " Delimitador: {");
+					//System.out.println(linha + " Delimitador: {");
 					for(int i = 0; i < count; i++) words.add("<-  Delimitador  ->" + " Delimitador: { " + " "
 							+ "                               Linha: " + linha);
 					sequence = sequence.replaceAll("\\{", " ");
 				} if(sequence.indexOf("}") >= 0) {
 					count = sequence.length()-sequence.replace("}", "").length();
-					System.out.println(linha + " Delimitador: }");
+					//System.out.println(linha + " Delimitador: }");
 					for(int i = 0; i < count; i++) words.add("<-  Delimitador  ->" + " Delimitador: } " + " "
 							+ "                               Linha: " + linha);
 					sequence = sequence.replaceAll("\\}", " ");
@@ -252,42 +252,42 @@ public class AnalysisLexical {
 				// relacional
 				if(sequence.indexOf("!=") >= 0){
 					count = sequence.length()-sequence.replace("!=", "").length();
-					System.out.println(linha + " Operador Relacional: !=");
+					//System.out.println(linha + " Operador Relacional: !=");
 					for(int i = 0; i < count; i++) words.add("<- Op Relacional -> " + "Operador Relacional: !=" + " "
 							+ "                          Linha: " + linha);
 					sequence = sequence.replaceAll("!=", " ");
 				}
 				if(sequence.indexOf("=") >= 0){
 					count = sequence.length()-sequence.replace("=", "").length();
-					System.out.println(linha + " Operador Relacional: =");
+					//System.out.println(linha + " Operador Relacional: =");
 					for(int i = 0; i < count; i++) words.add("<- Op Relacional -> " + "Operador Relacional: = " + " "
 							+ "                          Linha: " + linha);
 					sequence = sequence.replaceAll("=", " ");
 				}
 				if(sequence.indexOf("<") >= 0){
 					count = sequence.length()-sequence.replace("<", "").length();
-					System.out.println(linha + " Operador Relacional: <");
+					//System.out.println(linha + " Operador Relacional: <");
 					for(int i = 0; i < count; i++) words.add("<- Op Relacional -> " + "Operador Relacional: < " + " "
 							+ "                          Linha: " + linha);
 					sequence = sequence.replaceAll("<", " ");
 				}
 				if(sequence.indexOf(">") >= 0){
 					count = sequence.length()-sequence.replace(">", "").length();
-					System.out.println(linha + " Operador Relacional: >");
+					//System.out.println(linha + " Operador Relacional: >");
 					for(int i = 0; i < count; i++) words.add("<- Op Relacional -> " + "Operador Relacional: > " + " "
 							+ "                          Linha: " + linha);
 					sequence = sequence.replaceAll(">", " ");
 				}
 				if(sequence.indexOf("<=") >= 0){
 					count = sequence.length()-sequence.replace("<=", "").length();
-					System.out.println(linha + " Operador Relacional: <=");
+					//System.out.println(linha + " Operador Relacional: <=");
 					for(int i = 0; i < count; i++) words.add("<- Op Relacional -> " + "Operador Relacional: <= " + " "
 							+ "                          Linha: " + linha);
 					sequence = sequence.replaceAll("<=", " ");
 				}
 				if(sequence.indexOf(">=") >= 0){
 					count = sequence.length()-sequence.replace(">=", "").length();
-					System.out.println(linha + " Operador Relacional: >=");
+					//System.out.println(linha + " Operador Relacional: >=");
 					for(int i = 0; i < count; i++) words.add("<- Op Relacional -> " + "Operador Relacional: >= " + " "
 							+ "                          Linha: " + linha);
 					sequence = sequence.replaceAll(">=", " ");
@@ -295,21 +295,21 @@ public class AnalysisLexical {
 				//logico
 				if(sequence.indexOf("!") >= 0){
 					count = sequence.length()-sequence.replace("!", "").length();
-					System.out.println(linha + " Operador Logico: !");
+					//System.out.println(linha + " Operador Logico: !");
 					for(int i = 0; i < count; i++) words.add("<-  Op Logico  -> " + "Operador Logico: ! " + " "
 							+ "                          Linha: " + linha);
 					sequence = sequence.replaceAll("!", " ");
 				}
 				if(sequence.indexOf("&&") >= 0){
 					count = sequence.length()-sequence.replace("&&", "").length();
-					System.out.println(linha + " Operador Logico: &&");
+					//System.out.println(linha + " Operador Logico: &&");
 					for(int i = 0; i < count; i++) words.add("<-  Op Logico  -> " + "Operador Logico: && " + " "
 							+ "                          Linha: " + linha);
 					sequence = sequence.replaceAll("&&", " ");
 				}
 				if(sequence.indexOf("||") >= 0){
 					count = sequence.length()-sequence.replace("||", "").length();
-					System.out.println(linha + " Operador Logico: ||");
+					//System.out.println(linha + " Operador Logico: ||");
 					for(int i = 0; i < count; i++) words.add("<-  Op Logico  -> " + "Operador Logico: || " + " "
 							+ "                          Linha: " + linha);
 					sequence = sequence.replaceAll("||", " ");
@@ -317,27 +317,27 @@ public class AnalysisLexical {
 				//aritmeticos
 				if(sequence.indexOf("+") >= 0){
 					count = sequence.length()-sequence.replace("+", "").length();
-					System.out.println(linha + " Operador Aritmeticos: +");
+					//System.out.println(linha + " Operador Aritmeticos: +");
 					for(int i = 0; i < count; i++) words.add("<- Op Aritmetico -> " + "Operador Aritmeticos: + " + " "
 							+ "                          Linha: " + linha);
 					sequence = sequence.replaceAll("\\+", " ");
 				}
 				if(sequence.indexOf("*") >= 0){
 					count = sequence.length()-sequence.replace("*", "").length();
-					System.out.println(linha + " Operador Aritmeticos: *");
+					//System.out.println(linha + " Operador Aritmeticos: *");
 					for(int i = 0; i < count; i++) words.add("<- Op Aritmetico -> " + "Operador Aritmeticos: * " + " "
 							+ "                          Linha: " + linha);
 					sequence = sequence.replaceAll("\\*", " ");
 				}
 				if(sequence.indexOf("/") >= 0){
 					count = sequence.length()-sequence.replace("/", "").length();
-					System.out.println(linha + " Operador Aritmeticos: /");
+					//System.out.println(linha + " Operador Aritmeticos: /");
 					for(int i = 0; i < count; i++) words.add("<- Op Aritmetico -> " + "Operador Aritmeticos: / " + " "
 							+ "                          Linha: " + linha);
 					sequence = sequence.replaceAll("/", " ");
 				}if(sequence.indexOf("%") >= 0){
 					count = sequence.length()-sequence.replace("%", "").length();
-					System.out.println(linha + " Operador Aritmeticos: %");
+					//System.out.println(linha + " Operador Aritmeticos: %");
 					for(int i = 0; i < count; i++) words.add("<- Op Aritmetico -> " + "Operador Aritmeticos: % " + " "
 							+ "                          Linha: " + linha);
 					sequence = sequence.replaceAll("&", " ");
@@ -352,7 +352,7 @@ public class AnalysisLexical {
 							for(int j = 0; j < aux.length; j++){
 								if(aux[j].isEmpty()) continue;
 								else if(regex.isPalavrasReservadas(aux[j])){
-									System.out.println(linha + " Palavra Reservada: " + aux[j]);
+									//System.out.println(linha + " Palavra Reservada: " + aux[j]);
 									words.add("<- Pal Reservada ->" + " Palavra Reservada: " +  aux[j] + " "
 											+ "                       Linha: " + linha);
 									sequence = sequence.replaceFirst(aux[j], "");
@@ -364,7 +364,7 @@ public class AnalysisLexical {
 							for(int j = 0; j < aux.length; j++){
 								if(aux[j].isEmpty()) continue;
 								else if(regex.isIdentificador(aux[j])){
-									System.out.println(linha + " Identificador: " + aux[j]);
+									//System.out.println(linha + " Identificador: " + aux[j]);
 									words.add("<- Identificador ->" + " Identificador: " + aux[j] + " "
 											+ "                                    Linha: " + linha);
 									sequence = sequence.replaceFirst(aux[j], "");
@@ -378,14 +378,14 @@ public class AnalysisLexical {
 							if(!regex.isDigito(r[i])) {
 								words.add("<-     ERRO      -> Numero mal formado: " + r[i] + " "
 										+ "                  Linha: " + linha);
-								System.out.println(linha + " ERRO numero mal formado " + sequence);
+								//System.out.println(linha + " ERRO numero mal formado " + sequence);
 								sequence = sequence.replace(r[i], " ");								
 							} else {								
 								int countDots = r[i].length()-r[i].replace(".", "").length();
 								if(countDots>1){
 									words.add("<-     ERRO      -> Numero mal formado: " + r[i] + " "
 											+ "                  Linha: " + linha);
-									System.out.println(linha + " ERRO numero mal formado " + sequence);
+									//System.out.println(linha + " ERRO numero mal formado " + sequence);
 									sequence = sequence.replace(r[i].substring(1), "");
 								}
 								else if(countDots == 1) {
@@ -393,25 +393,25 @@ public class AnalysisLexical {
 										words.add("<-    Numero     -> Numero " + r[i] + " "
 												+ "                                  Linha: " + linha);
 										sequence = sequence.replaceFirst("-?[\\x09|\\x0A|\\x0D|\\x20]*?\\b[0-9]+(\\x2E[0-9]+)?\\b", " ");
-										System.out.println(linha + " Numero: " + sequence);
+										//System.out.println(linha + " Numero: " + sequence);
 									}else {
 										words.add("<-     ERRO      -> Numero mal formado "
 												+ "                  Linha: " + linha);
 										sequence = sequence.replace(r[i].substring(1), "");
-										System.out.println(linha + " ERRO Numero mal formado " + sequence);
+										//System.out.println(linha + " ERRO Numero mal formado " + sequence);
 									}
 								} else if(regex.isNumero(r[i])){
 									words.add("<-    Numero     -> Numero: " + r[i] + " "
 											+ "                                   Linha: " + linha);
 									sequence = sequence.replaceFirst("-?[\\x09|\\x0A|\\x0D|\\x20]*?\\b[0-9]+\\b", " ");
-									System.out.println(linha + " Numero: " + r[i]);
+									//System.out.println(linha + " Numero: " + r[i]);
 								}
 							}
 						}
 					}
 					count = sequence.length()-sequence.replace("-", "").length();
 					for(int i = 0; i < count; i++) {
-						System.out.println(linha + " Operador Aritmetico: -");
+						//System.out.println(linha + " Operador Aritmetico: -");
 						words.add("<- Op Aritmetico -> " + "Operador Aritmetico: - "  + " "
 								+ "                       Linha: " + linha);
 					}
@@ -423,7 +423,7 @@ public class AnalysisLexical {
 					for(int i = 0; i < r.length; i++){
 						if(r[i].isEmpty()) continue;
 						else if(regex.isPalavrasReservadas(r[i])){
-							System.out.println(linha + " Palavra Reservada: " + r[i]);
+							//	System.out.println(linha + " Palavra Reservada: " + r[i]);
 							words.add("<- Pal Reservada -> " + "Palavra Reservada: " +  r[i] +" "
 									+ "                       Linha: " + linha);
 							sequence = sequence.replaceFirst(r[i], "");	
@@ -438,7 +438,7 @@ public class AnalysisLexical {
 							if(countDots>1){
 								words.add("<-     ERRO      -> Numero mal formado: " + r[i] + " "
 										+ "                  Linha: " + linha);
-								System.out.println(linha + " ERRO numero mal formado " + sequence);
+								//	System.out.println(linha + " ERRO numero mal formado " + sequence);
 								sequence = sequence.replace(r[i].substring(1), "");
 							}
 							else if(countDots == 1) {
@@ -446,25 +446,25 @@ public class AnalysisLexical {
 									 words.add("<-     ERRO      -> Numero mal formado "
 												+ "                  Linha: " + linha);
 									 sequence = sequence.replace(r[i], " ");
-									 System.out.println(linha + " ERRO Numero mal formado");
+									 // System.out.println(linha + " ERRO Numero mal formado");
 								 }
 								 else if(r[i].indexOf(".")+1 < r[i].length()){
 									words.add("<-    Numero     -> Numero: " + r[i] + " "
 											+ "                                   Linha: " + linha);
 									sequence = sequence.replaceFirst("-?[\\x09|\\x0A|\\x0D|\\x20]*?\\b[0-9]+(\\x2E[0-9]+)?\\b", " ");
-									System.out.println(linha + " Numero: " + r[i]);
+									//System.out.println(linha + " Numero: " + r[i]);
 								} else {
 									words.add("<-     ERRO      -> Numero mal formado "
 											+ "                  Linha: " + linha);
 									sequence = sequence.replace(r[i], " ");
-									System.out.println(linha + " ERRO Numero mal formado");
+									//	System.out.println(linha + " ERRO Numero mal formado");
 								}
 							} else {
 								if (r[i].matches("\\d*")){
 									words.add("<-    Numero     -> Numero: " + r[i] + " "
 											+ "                                   Linha: " + linha);
 									sequence = sequence.replaceFirst(r[i], " ");
-									System.out.println(linha + " Numero: " + r[i]);
+									//	System.out.println(linha + " Numero: " + r[i]);
 								}
 							}
 						}
@@ -476,17 +476,17 @@ public class AnalysisLexical {
 					for(int i = 0; i < r.length; i++){
 						if(r[i].isEmpty()) continue;
 						else if(regex.hasErrorId(r[i])){ //contem uma caractere nao aceitavel
-							System.out.println(linha + " Identificador mal formado:" + r[i]);
+						//	System.out.println(linha + " Identificador mal formado:" + r[i]);
 							words.add("<-     ERRO      -> Identificador mal formado: " + r[i] + " "
 									+ "                  Linha: " + linha);
 							sequence = sequence.replaceFirst(r[i], "");
 						} else if(!r[i].substring(0, 1).matches("[a-zA-Z]")){ //primeiro digito nao eh uma letra 
-							System.out.println(linha + " Identificador mal formado: " + r[i]);
+					//		System.out.println(linha + " Identificador mal formado: " + r[i]);
 							words.add("<-     ERRO      -> Identificador mal formado: " + r[i] + " "
 									+ "                  Linha: " + linha);
 							sequence = sequence.replaceFirst(r[i], "");
 						} else {
-							System.out.println(linha + " Identificador: " + r[i]);
+				//			System.out.println(linha + " Identificador: " + r[i]);
 							words.add("<- Identificador ->" + " Identificador: " + r[i] + " "
 									+ "                                    Linha: " + linha);
 							sequence = sequence.replaceFirst(r[i], "");
@@ -515,7 +515,7 @@ public class AnalysisLexical {
 			word = word.split("   ")[0];
 			word = word.replace(" ", "");
 			pos = sequenceLine.indexOf(word);
-			System.out.println(pos + " palavra " + word);
+			//System.out.println(pos + " palavra " + word);
 			if(pos == -1){
 				
 			}else{
@@ -534,7 +534,7 @@ public class AnalysisLexical {
 		}
 		index = 0;
 		for(int i = initPos; i < lastPos; i++){
-			System.out.println(i + " string " + words.get(i));
+			//System.out.println(i + " string " + words.get(i));
 			words.set(i, aux2[index]);
 			index++;
 			//System.out.println(i + " string " + words.get(i));

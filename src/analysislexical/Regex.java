@@ -25,9 +25,30 @@ public class Regex {
 	private final Pattern quotes = Pattern.compile("\"");
 	private final Pattern cadeia = Pattern.compile("\".*\"");
 	private final Pattern notSimbolo = Pattern.compile("[\\x00-\\x1F\\x7F-\\xFF]");
+	private final Pattern tipo = Pattern.compile("float|int|string|bool");
+	private final Pattern booleano = Pattern.compile("true|false");
+	
 	private Matcher matcher;
 	
 	public Regex () {}
+	
+	public boolean getBooleano(String sequence) {
+		try{
+			this.matcher = this.booleano.matcher(sequence);
+			return this.matcher.matches();
+		}catch (Exception e){
+			return false;
+		}
+	}
+	
+	public boolean getTipo(String sequence) {
+		try{
+			this.matcher = this.tipo.matcher(sequence);
+			return this.matcher.matches();
+		}catch (Exception e){
+			return false;
+		}
+	}
 	
 	public boolean isNotSimbolo(String sequence) {
 		try{

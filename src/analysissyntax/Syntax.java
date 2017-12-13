@@ -172,12 +172,30 @@ public class Syntax {
 								if(metodo(i, j)){
 									j++;
 									checkSecondIndex++;
+									if(lineMap.get(checkFirstIndex).get(checkSecondIndex).split(":")[1].trim() == "}"){
+										j++;
+										checkSecondIndex++;
+										if(variasClasses(i, j)) return true;
+									}
 								}
 							}
 						}
 					}
 				}
 			}
+		}
+		errors.add("Linha: " + checkFirstIndex + " Classe mal formada");
+		return false;
+	}
+	
+	public boolean variasClasses(int i, int j) {
+		if(classe(i, j)){
+			j++;
+			checkSecondIndex++;
+			return true;
+		} else if(tokenMap.get(i).get(j).isEmpty()) {
+			checkFirstIndex++;
+			return true;
 		}
 		return false;
 	}
@@ -191,14 +209,121 @@ public class Syntax {
 				checkSecondIndex++;
 				if(comOuSemRetorno(i, j))return true;
 			}
-		} else if(tokenMap.get(i).get(j).isEmpty()) return true;
+		} else if(tokenMap.get(i).get(j).isEmpty()) {
+			checkFirstIndex++;
+			return true;
+		}
 		return false;
 	}
 	
 	public boolean comOuSemRetorno(int i, int j) {
 		if(ehMain(i, j)){
-			
+			j++;
+			checkSecondIndex++;
+			if(grammar.getTipo(lineMap.get(i).get(j).split(":")[1].trim())){
+				j++;
+				checkSecondIndex++;
+				if(tokenMap.get(i).get(j) == "Identificador"){
+					j++;
+					checkSecondIndex++;
+					if(lineMap.get(i).get(j).split(":")[1].trim() == "("){
+						j++;
+						checkSecondIndex++;
+						if(parametros(i, j)) {
+							j++;
+							checkSecondIndex++;
+							if(lineMap.get(i).get(j).split(":")[1].trim() == ")"){
+								j++;
+								checkSecondIndex++;
+								if(lineMap.get(i).get(j).split(":")[1].trim() == "{"){
+									j++;
+									checkSecondIndex++;
+									if(ehProgram(i, j)){
+										j++;
+										checkSecondIndex++;
+										if(lineMap.get(i).get(j).split(":")[1].trim() == "}"){
+											j++;
+											checkSecondIndex++;
+											if(metodo(i, j)){
+												checkSecondIndex++;
+												return true;
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}			
+			} else if(tokenMap.get(i).get(j) == "Identificador"){
+				j++;
+				checkSecondIndex++;
+				if(lineMap.get(i).get(j).split(":")[1].trim() == "("){
+					j++;
+					checkSecondIndex++;
+					if(parametros(i, j)) {
+						j++;
+						checkSecondIndex++;
+						if(lineMap.get(i).get(j).split(":")[1].trim() == ")"){
+							j++;
+							checkSecondIndex++;
+							if(lineMap.get(i).get(j).split(":")[1].trim() == "{"){
+								j++;
+								checkSecondIndex++;
+								if(ehProgram(i, j)){
+									j++;
+									checkSecondIndex++;
+									if(lineMap.get(i).get(j).split(":")[1].trim() == "}"){
+										j++;
+										checkSecondIndex++;
+										if(metodo(i, j)){
+											checkSecondIndex++;
+											return true;
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
 		}
+		return false;
+	}
+	
+	public boolean parametros(int i, int j) {
+		if(grammar.getTipo(lineMap.get(i).get(j).split(":")[1].trim())){
+			j++;
+			checkSecondIndex++;
+			if(tokenMap.get(i).get(j) == "Identificador"){
+				j++;
+				checkSecondIndex++;
+				if(acrescentarParametros(i, j)){
+					checkSecondIndex++;
+					return true;
+				}
+			}
+		} else if(tokenMap.get(i).get(j).isEmpty()) {
+			checkFirstIndex++;
+			return true;
+		}
+		errors.add("Linha: " + checkFirstIndex + " parametros mal formado");
+		return false;
+	}
+	
+	public boolean acrescentarParametros(int i, int j) {
+		if(lineMap.get(i).get(j).split(":")[1].trim() == ",") {
+			j++;
+			checkSecondIndex++;
+			if(parametros(i, j)){
+				checkSecondIndex++;
+				return true;
+			}
+		} else if(tokenMap.get(i).get(j).isEmpty()) {
+			checkFirstIndex++;
+			return true;
+		}
+		return false;
 	}
 	
 	public boolean ehMain(int i, int j){
@@ -235,6 +360,10 @@ public class Syntax {
 	}
 	
 	public boolean ehProgram(int i, int j){
+		if(checkSecondIndex >= tokenMap.get(i).size()){
+			checkSecondIndex++;
+			checkFirstIndex++;
+		}
 		if(lineMap.get(i).get(j).split(":")[1].trim() == "for"){
 			j++;
 			checkSecondIndex++;
@@ -246,14 +375,50 @@ public class Syntax {
 		else if(print(i, j)) return true;
 		else if(instancia(i, j)) return true;
 		else if(chamadaMetodosPontoVirgula(i, j)) return true;
+		else if(returnR(i, j)) return true;
+		else if(tokenMap.get(i).get(j).isEmpty()){
+			checkFirstIndex++;
+			return true;
+		}
+		return false;
+	}
+	
+	//ESSe
+	public boolean returnR(int i, int j) {
+		if (lineMap.get(i).get(j).split(":")[1].trim() == "<<") {
+			j++;
+			checkSecondIndex++;
+			if(tiposReturn(i, j)){
+				if (lineMap.get(i).get(j).split(":")[1].trim() == ";") {
+					checkSecondIndex++;
+					return true;	
+				}				 
+			}
+		}
+		return false;
+	}
+	//ESSE
+	private boolean tiposReturn(int i, int j) {
+		if(ehOperation(i, j)) return true;
+		return false;
 	}
 	
 	public boolean chamadaMetodosPontoVirgula(int i, int j) {
-		
+		if(chamadaMetodos(i, j)){
+			j++;
+			checkSecondIndex++;
+			if(lineMap.get(i).get(j).split(":")[1].trim() == ";"){
+				j++;
+				checkSecondIndex++;
+				if(ehProgram(i, j)) return true;
+			}
+		}
+		errors.add("Linha: " + checkFirstIndex + " Chamada de metodo mal formada");
+		return false;
 	}
+	
 	//ESSe
-	public boolean multiplasImpressoes(int i, int j) {
-		
+	public boolean multiplasImpressoes(int i, int j) {		
 		if (lineMap.get(i).get(j).split(":")[1].trim() == ",") {
 			j++;
 			checkSecondIndex++;
@@ -522,7 +687,7 @@ public class Syntax {
 				checkSecondIndex++;
 				if(ehOperation(i, j)) return true;
 			}
-		} else if(acessoVetorMatrix(i, j)){
+		} else if(acessoVetorMatriz	(i, j)){
 			j++;
 			checkSecondIndex++;
 			if(lineMap.get(i).get(j).split(":")[1].trim() == "=") {
@@ -606,15 +771,20 @@ public class Syntax {
 	public boolean scan(int i, int j){
 		if (lineMap.get(i).get(j).split(":")[1].trim() == "scan") {
 			j++;
+			checkSecondIndex++;
 			if (lineMap.get(i).get(j).split(":")[1].trim() == "(") {
 				j++;
+				checkSecondIndex++;
 				if (tokenMap.get(i).get(j) == "Identificador") {
 					j++;
+					checkSecondIndex++;
 					if(!multiplasLeituras(i, j)){
 						if (lineMap.get(i).get(j).split(":")[1].trim() == ")") {
 							j++;
+							checkSecondIndex++;
 							if (lineMap.get(i).get(j).split(":")[1].trim() == ";") {
 								j++;
+								checkSecondIndex++;
 								if(tokenMap.get(i).get(j).isEmpty() || tokenMap.get(i).get(j) == null) 
 									return true;
 							}
@@ -633,12 +803,16 @@ public class Syntax {
 		
 		if (tokenMap.get(i).get(j) == "Identificador") {
 			j++;
+			checkSecondIndex++;
 			if(lineMap.get(i).get(j).split(":")[1].trim() == "[") {
 				j++;
+				checkSecondIndex++;
 				if(tokenMap.get(i).get(j) == "Numero") {
 					j++;
+					checkSecondIndex++;
 					if (lineMap.get(i).get(j).split(":")[1].trim() == "]") {
 						j++;
+						checkSecondIndex++;
 						fatoracaoAcessoVetorMatriz(i, j);
 						return true;
 					}
@@ -647,15 +821,19 @@ public class Syntax {
 		}
 		return false;
 	}
+
 	//ESSE
 	public boolean fatoracaoAcessoVetorMatriz(int i, int j) {
 		
 		if(lineMap.get(i).get(j).split(":")[1].trim() == "[") {
 			j++;
+			checkSecondIndex++;
 			if(tokenMap.get(i).get(j) == "Numero") {
 				j++;
+				checkSecondIndex++;
 				if (lineMap.get(i).get(j).split(":")[1].trim() == "]") {
 					j++;
+					checkSecondIndex++;
 					if(fatoracaoAcessoVetorMatriz(i, j))
 					return true;
 				}
@@ -665,18 +843,24 @@ public class Syntax {
 		return false;
 	}
 	
+	
 	//ESSE
 	public boolean print(int i, int j){
 		if (lineMap.get(i).get(j).split(":")[1].trim() == "print") {
 			j++;
+			checkSecondIndex++;
 			if (lineMap.get(i).get(j).split(":")[1].trim() == "(") {
 				j++;
+				checkSecondIndex++;
 				if (tokenMap.get(i).get(j) == "Identificador") {
 					j++;
+					checkSecondIndex++;
 					if (lineMap.get(i).get(j).split(":")[1].trim() == ")") {
 						j++;
+						checkSecondIndex++;
 						if (lineMap.get(i).get(j).split(":")[1].trim() == ";") {
 							j++;
+							checkSecondIndex++;
 							if(tokenMap.get(i).get(j).isEmpty() || tokenMap.get(i).get(j) == null) 
 								return true;
 						}
@@ -685,8 +869,10 @@ public class Syntax {
 					multiplasImpressoes(i, j);
 					if (lineMap.get(i).get(j).split(":")[1].trim() == ")") {
 						j++;
+						checkSecondIndex++;
 						if (lineMap.get(i).get(j).split(":")[1].trim() == ";") {
 							j++;
+							checkSecondIndex++;
 							if(tokenMap.get(i).get(j).isEmpty() || tokenMap.get(i).get(j) == null) 
 								return true;
 						}
@@ -696,8 +882,10 @@ public class Syntax {
 				multiplasLeituras(i, j);
 					if (lineMap.get(i).get(j).split(":")[1].trim() == ")") {
 						j++;
+						checkSecondIndex++;
 						if (lineMap.get(i).get(j).split(":")[1].trim() == ";") {
 							j++;
+							checkSecondIndex++;
 							if(tokenMap.get(i).get(j).isEmpty() || tokenMap.get(i).get(j) == null) 
 								return true;
 						}
@@ -708,13 +896,16 @@ public class Syntax {
 		} 
 		return false;
 	}
+	
 	//ESSE
 	public boolean multiplasLeituras(int i, int j) {
 		
 		if (lineMap.get(i).get(j).split(":")[1].trim() == ",") {
 			j++;
+			checkSecondIndex++;
 			if (tokenMap.get(i).get(j) == "Identificador") {
 				j++;
+				checkSecondIndex++;
 				if(tokenMap.get(i).size() <= j){
 					multiplasLeituras(i, j);
 				}
@@ -793,7 +984,10 @@ public class Syntax {
 			j++;
 			checkSecondIndex++;
 			if(relacionalAritmetico(i, j)) return true;
-		} else if(tokenMap.get(i).get(j).isEmpty()) return true;
+		} else if(tokenMap.get(i).get(j).isEmpty()) {
+			checkFirstIndex++;
+			return true;			
+		}
 		return false;
 	}
 	
@@ -872,7 +1066,10 @@ public class Syntax {
 					if(tokenMap.get(i).get(j) == "Identificador") return true;
 				}
 			}
-		} else if (tokenMap.get(i).get(j).isEmpty()) return true;
+		} else if (tokenMap.get(i).get(j).isEmpty()) {
+			checkFirstIndex++;
+			return true;
+		}
 		return false;
 	}
 	
@@ -902,7 +1099,10 @@ public class Syntax {
 			j++;
 			checkSecondIndex++;
 			if(varConstObj(i, j)) return true;
-		} else if(tokenMap.get(i).get(j).isEmpty()) return true;
+		} else if(tokenMap.get(i).get(j).isEmpty()){
+			checkFirstIndex++;
+			return true;
+		}
 		return false;
 	}
 	
@@ -933,7 +1133,10 @@ public class Syntax {
 				checkSecondIndex++;
 				if(variosObjetos(i, j)) return true;
 			}
-		} else if (tokenMap.get(i).get(j).isEmpty()) return true;
+		} else if (tokenMap.get(i).get(j).isEmpty()) {
+			checkFirstIndex++;
+			return true;
+		}
 		return false;
 	}
 	
@@ -999,7 +1202,10 @@ public class Syntax {
 			j++;
 			checkSecondIndex++;
 			if(variaveis(i, j)) return true;
-		} else if(tokenMap.get(i).get(j).isEmpty()) return true;
+		} else if(tokenMap.get(i).get(j).isEmpty()) {
+			checkFirstIndex++;
+			return true;
+		}
 		return false;
 	}
 	
@@ -1028,7 +1234,10 @@ public class Syntax {
 			j++;
 			checkSecondIndex++;
 			tratamentoConstante(i, j);
-		} else if(tokenMap.get(i).get(j).isEmpty()) return true;
+		} else if(tokenMap.get(i).get(j).isEmpty()) {
+			checkFirstIndex++;
+			return true;
+		}
 		return false;
 	}
 	

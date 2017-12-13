@@ -151,6 +151,12 @@ public class Syntax {
 				checkFirstIndex++;
 			}
 		}
+		if(errors.isEmpty())System.out.println("ANALISADO COM SUCESSO");
+		else {
+			for(int a = 0; a < errors.size(); a++) {
+				System.out.println("ERRORS: " + errors.get(a));
+			}
+		}
 		return false;	
 	}
 	

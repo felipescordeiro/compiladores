@@ -38,6 +38,7 @@ public class Start {
 			for(int i = 0; i < archive.length; i++){
 				sintatico.parser(archive[i].getName());
 				sintatico.printLine();
+				sintatico.checkGrammar();
 			}
 		} catch(FileNotFoundException e) {
 			e.printStackTrace();

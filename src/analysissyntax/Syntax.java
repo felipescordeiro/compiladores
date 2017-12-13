@@ -239,8 +239,67 @@ public class Syntax {
 			j++;
 			checkSecondIndex++;
 			if (ehFor(i, j)) return true;
-			else if()
+			else if(ehIf(i, j)) return true;
 		}
+	}
+	
+	public boolean ehIf(int i, int j) {
+		if(lineMap.get(i).get(j).split(":")[1].trim() == "if"){
+			j++;
+			checkSecondIndex++;
+			if(lineMap.get(i).get(j).split(":")[1].trim() == "("){
+				j++;
+				checkSecondIndex++;
+				if(expressaoLogicaRelacional(i, j)){
+					j++;
+					checkSecondIndex++;
+					if(lineMap.get(i).get(j).split(":")[1].trim() == ")"){
+						j++;
+						checkSecondIndex++;
+						if(lineMap.get(i).get(j).split(":")[1].trim() == "{"){
+							j++;
+							checkSecondIndex++;
+							if(ehProgram(i, j)){
+								j++;
+								checkSecondIndex++;
+								if(elseOpcional(i, j)) {
+									j++;
+									checkSecondIndex++;
+									return true;
+								}								
+							}
+						}
+					}
+				}
+			}
+		}
+		errors.add("Linha: " + checkFirstIndex + " If mal formado");
+		return false;
+	}
+	
+	public boolean elseOpcional(int i, int j) {
+		if(lineMap.get(i).get(j).split(":")[1].trim() == "else"){
+			j++;
+			checkSecondIndex++;
+			if(lineMap.get(i).get(j).split(":")[1].trim() == "{"){
+				j++;
+				checkSecondIndex++;
+				if(ehProgram(i, j)){
+					j++;
+					checkSecondIndex++;
+					if(lineMap.get(i).get(j).split(":")[1].trim() == "}"){
+						j++;
+						checkSecondIndex++;
+						if(ehProgram(i, j)){
+							j++;
+							checkSecondIndex++;
+						}
+					}
+				}
+			}
+		} else if(ehProgram(i, j)) return true;
+		errors.add("Linha: " + checkFirstIndex + " else mal formado");
+		return false;
 	}
 	
 	public boolean ehFor(int i, int j) {

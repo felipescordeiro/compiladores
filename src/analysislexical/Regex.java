@@ -41,6 +41,24 @@ public class Regex {
 		}
 	}
 	
+	public boolean getLogico(String sequence) {
+		try{
+			this.matcher = this.opLogicos.matcher(sequence);
+			return this.matcher.matches();
+		}catch (Exception e){
+			return false;
+		}
+	}
+	
+	public boolean getAritmetico(String sequence) {
+		try{
+			this.matcher = this.opAritmeticos.matcher(sequence);
+			return this.matcher.matches();
+		}catch (Exception e){
+			return false;
+		}
+	}
+	
 	public boolean getTipo(String sequence) {
 		try{
 			this.matcher = this.tipo.matcher(sequence);

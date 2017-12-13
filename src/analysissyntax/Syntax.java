@@ -239,8 +239,171 @@ public class Syntax {
 			j++;
 			checkSecondIndex++;
 			if (ehFor(i, j)) return true;
-			else if(ehIf(i, j)) return true;
+		} else if(ehIf(i, j)) return true;
+		else if(classificarVariavel(i, j)) return true;
+		else if(criarVariavel(i, j)) return true;
+		else if(scan(i, j)) return true;
+		else if(print(i, j)) return true;
+		else if(instancia(i, j)) return true;
+		else if(chamadaMetodosPontoVirgula(i, j)) return true;
+	}
+	
+	public boolean chamadaMetodosPontoVirgula(int i, int j) {
+		
+	}
+	//ESSe
+	public boolean multiplasImpressoes(int i, int j) {
+		
+		if (lineMap.get(i).get(j).split(":")[1].trim() == ",") {
+			j++;
+			checkSecondIndex++;
+			if (impressao(i, j)) {
+				j++;
+				checkSecondIndex++;
+				if(tokenMap.get(i).size() <= j){
+					multiplasImpressoes(i, j);
+				}
+			}
 		}
+		
+		return false;
+	}
+	
+	//esse
+	public boolean impressao(int i, int j) {
+		if(ehOperation(i, j)) return true;
+		return false;
+	}
+	
+	public boolean instancia(int i, int j) {
+		if(tokenMap.get(i).get(j) == "Identificador"){
+			j++;
+			checkSecondIndex++;
+			if(lineMap.get(i).get(j).split(":")[1].trim() == "="){
+				j++;
+				checkSecondIndex++;
+				if(lineMap.get(i).get(j).split(":")[1].trim() == ">"){
+					j++;
+					checkSecondIndex++;
+					if(tokenMap.get(i).get(j) == "Identificador"){
+						j++;
+						checkSecondIndex++;
+						if(lineMap.get(i).get(j).split(":")[1].trim() == ">"){
+							j++;
+							checkSecondIndex++;
+							if(passagemParametros(i, j)){
+								j++;
+								checkSecondIndex++;
+								if(lineMap.get(i).get(j).split(":")[1].trim() == ")"){
+									j++;
+									checkSecondIndex++;
+									if(lineMap.get(i).get(j).split(":")[1].trim() == ";"){
+										j++;
+										checkSecondIndex++;
+										if(ehProgram(i, j)) return true;
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		errors.add("Linha: " + checkFirstIndex + " Instancia mal formada");
+		return false;
+	}
+	
+	public boolean passagemParametros(int i, int j) {
+		if(ehOperation(i, j)){
+				j++;
+				checkSecondIndex++;
+				if(maisPassagens(i, j)) return true;
+		} else if(tokenMap.get(i).get(j).isEmpty()) return true;
+		return false;
+	}
+	
+	public boolean maisPassagens(int i, int j) {
+		if(lineMap.get(i).get(j).split(":")[1].trim() == ","){
+			j++;
+			checkSecondIndex++;
+			if(passagemParametros(i, j)) return true;
+		}
+		return false;
+	}
+	
+	public boolean criarVariavel(int i, int j) {
+		if(grammar.getTipo(lineMap.get(i).get(j).split(":")[1].trim())){
+			j++;
+			checkSecondIndex++;
+			if(variaveis(i, j)){
+				j++;
+				checkSecondIndex++;
+				if(lineMap.get(i).get(j).split(":")[1].trim() == ";"){
+					j++;
+					checkSecondIndex++;
+					if(ehProgram(i, j)) return true;
+				}
+			}
+		} else if(criarObjetos(i, j)) return true;
+		return false;
+	}
+	
+	public boolean criarObjetos(int i, int j) {
+		if(criarObjetosLinha(i, j)){
+			j++;
+			checkSecondIndex++;
+			if (ehProgram(i, j)) return true;
+		}
+		return false;
+	}
+	
+	
+	
+	public boolean classificarVariavel(int i, int j) {
+		if(lineMap.get(i).get(j).split(":")[1].trim() == "-"){
+			j++;
+			checkSecondIndex++;
+			if(lineMap.get(i).get(j).split(":")[1].trim() == "-"){
+				j++;
+				checkSecondIndex++;
+				if(lineMap.get(i).get(j).split(":")[1].trim() == ">"){
+					j++;
+					checkSecondIndex++;
+					if(operationLinhe(i, j)){
+						j++;
+						checkSecondIndex++;
+						return true;
+					}
+				}
+			} else if(lineMap.get(i).get(j).split(":")[1].trim() == ">"){
+				j++;
+				checkSecondIndex++;
+				if(operationLinhe(i, j)){
+					j++;
+					checkSecondIndex++;
+					return true;
+				}
+			}
+		} else if(operationLinhe(i, j)){
+			j++;
+			checkSecondIndex++;
+			return true;
+		}
+		errors.add("Linha: " + checkFirstIndex + "Classificar variavel mal formado");
+		return false;
+	}
+	
+	public boolean operationLinhe(int i, int j){
+		if(operationFor(i, j)){
+			j++;
+			checkSecondIndex++;
+			if(lineMap.get(i).get(j).split(":")[1].trim() == ";"){
+				j++;
+				checkSecondIndex++;
+				if(ehProgram(i, j)) return true;
+			}
+		}
+		return false;
 	}
 	
 	public boolean ehIf(int i, int j) {
@@ -635,26 +798,67 @@ public class Syntax {
 	}
 	
 	public boolean value(int i, int j) {
-				if (tokenMap.get(i).get(j) == "Identificador") {
-					j++;
-					return true;
-				}else if(tokenMap.get(i).get(j) == "Numero") {
-					j++;
-					return true;
-				}else if (tokenMap.get(i).get(j) == "booleano") {
-					j++;
-					return true;
-				}else if (tokenMap.get(i).get(j) == "Cadeia de Caracteres") {
-					j++;
-					return true;
-				}else if (acessoVetorMatriz(i,j)) {
-					j++;
-					return true;
-				}else if(){
-					
-				}
-				return false;
+		if (tokenMap.get(i).get(j) == "Identificador") {
+			j++;
+			checkSecondIndex++;
+			return true;
+		}else if(tokenMap.get(i).get(j) == "Numero") {
+			j++;
+			checkSecondIndex++;
+			return true;
+		}else if (tokenMap.get(i).get(j) == "booleano") {
+			j++;
+			checkSecondIndex++;
+			return true;
+		}else if (tokenMap.get(i).get(j) == "Cadeia de Caracteres") {
+			j++;
+			checkSecondIndex++;
+			return true;
+		}else if (acessoVetorMatriz(i,j)) {
+			j++;
+			checkSecondIndex++;
+			return true;
+		}else if(chamadaMetodos(i,j)){
+			j++;
+			checkSecondIndex++;
+			return true;
+		}
+		return false;
+	}
+	
+	//ESSSe
+	private boolean chamadaMetodos(int i, int j) {
+		if (tokenMap.get(i).get(j) == "Identificador") {
+			j++;
+			checkSecondIndex++;
+			if(fatoracaochamadaMetodos(i,j)) return true;
+		}
+		return false;
+	}
+	//ESSSe
+	private boolean fatoracaochamadaMetodos(int i, int j) {
+		if (lineMap.get(i).get(j).split(":")[1].trim() == "::") {
+			j++;
+			checkSecondIndex++;
+			if (tokenMap.get(i).get(j) == "Identificador") {
+				j++;
+				checkSecondIndex++;
+				if(fatoracaodafatoracao(i,j)) return true;
 			}
+		}
+		return false;
+	}
+	
+	//ESSSe
+	public boolean fatoracaodafatoracao(int i, int j) {
+		if (lineMap.get(i).get(j).split(":")[1].trim() == "(") {
+			j++;
+			checkSecondIndex++;			
+			if(passagemParametros(i,j)) return true;
+		}
+		return false;
+	}
+	
 	public boolean heranca(int i, int j) {
 		if(lineMap.get(i).get(j).split(":")[1].trim() == "<"){
 			j++;
